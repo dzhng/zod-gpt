@@ -1,19 +1,17 @@
-import { z } from 'zod';
-
-import { RequestOptions, Response, ModelConfig } from '../types';
+import { ModelRequestOptions, ModelResponse, ModelConfig } from '../types';
 
 export interface CompletionApi {
   modelConfig: ModelConfig;
 
-  chatCompletion<T extends z.ZodType>(
+  chatCompletion(
     messages: any[],
-    opt?: RequestOptions<T>,
-  ): Promise<Response<T>>;
+    opt?: ModelRequestOptions,
+  ): Promise<ModelResponse>;
 
-  textCompletion<T extends z.ZodType>(
+  textCompletion(
     prompt: string,
-    opt?: RequestOptions<T>,
-  ): Promise<Response<T>>;
+    opt?: ModelRequestOptions,
+  ): Promise<ModelResponse>;
 
   getTokensFromPrompt(promptOrMessages: string[]): number;
 }

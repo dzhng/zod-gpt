@@ -53,6 +53,21 @@ export type ModelRequestOptions = {
   events?: EventEmitter;
 };
 
+export type ModelResponse = {
+  // raw response from the completion API
+  content?: string;
+  name?: string;
+  arguments?: string;
+  usage?: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
+
+  // function to send another message in the same chat, this will automatically reuse all existing settings, and append a new message to the messages array
+  respond: (prompt: string, opt: ModelRequestOptions) => Promise<ModelResponse>;
+};
+
 // don't expost the functions array to the request layer
 export type RequestOptions<T extends z.ZodType> = Omit<
   ModelRequestOptions,
@@ -70,18 +85,7 @@ export type RequestOptions<T extends z.ZodType> = Omit<
   autoHeal?: boolean;
 };
 
-export interface Response<T extends z.ZodType> {
+export type Response<T extends z.ZodType> = ModelResponse & {
+  // parsed and typecasted data from the model
   data: z.infer<T>;
-
-  content?: string;
-  name?: string;
-  arguments?: string;
-  usage?: {
-    promptTokens: number;
-    completionTokens: number;
-    totalTokens: number;
-  };
-
-  // function to send another message in the same chat, this will automatically reuse all existing settings, and append a new message to the messages array
-  respond: (prompt: string, opt: RequestOptions<T>) => Promise<Response<T>>;
-}
+};
