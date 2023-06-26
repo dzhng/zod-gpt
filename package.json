@@ -1,5 +1,5 @@
 {
-  "name": "zod-gpt",
+  "name": "@dzhng/zod-gpt",
   "description": "Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions",
   "version": "0.1.0",
   "packageManager": "yarn@3.4.1",
@@ -29,7 +29,7 @@
   "homepage": "https://github.com/dzhng/zod-gpt",
   "repository": {
     "type": "git",
-    "url": "git@github.com:dzhng/zod-gpt.git"
+    "url": "git+ssh://git@github.com/dzhng/zod-gpt.git"
   },
   "bugs": {
     "url": "https://github.com/dzhng/zod-gpt/issues"
