@@ -1,7 +1,7 @@
 {
-  "name": "llama-flow",
-  "description": "The Typescript-first prompt engineering toolkit for working with chat based LLMs.",
-  "version": "0.10.3",
+  "name": "zod-gpt",
+  "description": "Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions",
+  "version": "0.1.0",
   "packageManager": "yarn@3.4.1",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -13,6 +13,8 @@
   ],
   "keywords": [
     "typescript",
+    "zod",
+    "gpt",
     "chatgpt",
     "llama",
     "llm",
@@ -24,13 +26,13 @@
   ],
   "author": "David Zhang <david@aomni.com>",
   "license": "MIT",
-  "homepage": "https://github.com/dzhng/llamaflow",
+  "homepage": "https://github.com/dzhng/zod-gpt",
   "repository": {
     "type": "git",
-    "url": "git@github.com:dzhng/llamaflow.git"
+    "url": "git@github.com:dzhng/zod-gpt.git"
   },
   "bugs": {
-    "url": "https://github.com/dzhng/llamaflow/issues"
+    "url": "https://github.com/dzhng/zod-gpt/issues"
   },
   "scripts": {
     "setup": "husky install",
@@ -41,7 +43,6 @@
     "playground": "node -r tsconfig-paths/register -r ts-node/register playground"
   },
   "dependencies": {
-    "axios": "^1.3.4",
     "debug": "^4.3.4",
     "js-tiktoken": "^1.0.7",
     "jsonic": "^1.0.1",
