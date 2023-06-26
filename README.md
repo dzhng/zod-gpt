@@ -1,8 +1,8 @@
-# 🦙 LLamaFlow
+# ✨ ZodGPT
 
-[![test](https://github.com/dzhng/llamaflow/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/dzhng/llamaflow/actions/workflows/test.yml)
+[![test](https://github.com/dzhng/zod-gpt/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/dzhng/zod-gpt/actions/workflows/test.yml)
 
-The Typescript-first prompt engineering toolkit for working with chat based large language models (LLMs).
+Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions.
 
 - [Introduction](#-introduction)
 - [Usage](#-usage)

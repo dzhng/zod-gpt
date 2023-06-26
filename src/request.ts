@@ -19,8 +19,8 @@ const Defaults = {
 export async function request<T extends z.ZodType = z.ZodString>(
   model: Model,
   prompt: string | (() => string),
-  _opt?: Partial<RequestOptions>,
-): Promise<Response<z.infer<T>>> {
+  _opt?: Partial<RequestOptions<T>>,
+): Promise<Response<T>> {
   const message = typeof prompt === 'string' ? prompt : prompt();
   const opt = defaults(
     {

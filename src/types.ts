@@ -52,12 +52,12 @@ export type ModelRequestOptions = {
 };
 
 // don't expost the functions array to the request layer
-export type RequestOptions = Omit<
+export type RequestOptions<T extends z.ZodType> = Omit<
   ModelRequestOptions,
   'functions' | 'callFunction'
 > & {
   // set a zod schema to enable JSON output
-  schema?: z.ZodType;
+  schema?: T;
 
   // set to enable automatically slicing the prompt on token overflow. prompt will be sliced starting from the last character
   // default: false
@@ -68,8 +68,8 @@ export type RequestOptions = Omit<
   autoHeal?: boolean;
 };
 
-export interface Response<T = any> {
-  data: T;
+export interface Response<T extends z.ZodType> {
+  data: z.infer<T>;
 
   content?: string;
   name?: string;
@@ -81,5 +81,5 @@ export interface Response<T = any> {
   };
 
   // function to send another message in the same chat, this will automatically reuse all existing settings, and append a new message to the messages array
-  respond: (prompt: string, opt: RequestOptions) => Promise<Response<T>>;
+  respond: (prompt: string, opt: RequestOptions<T>) => Promise<Response<T>>;
 }

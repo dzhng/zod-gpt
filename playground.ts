@@ -11,12 +11,33 @@ import { OpenAI, request } from './src';
   );
   console.info('Model created', model);
 
-  const res = await request(model, 'Generate a startup idea', {
+  const resStartup = await request(model, 'Generate a startup idea', {
     schema: z.object({
       name: z.string().describe('The name of the startup'),
       description: z.string().describe('What does this startup do?'),
     }),
   });
+  console.info('Response: ', resStartup.data);
 
-  console.info('Response: ', res.data);
+  const resHello = await request(model, 'Hello');
+  console.info('Response:', resHello.data);
+
+  const resComplexSchema = await request(
+    model,
+    'Generate a step by step plan to run a hachathon',
+    {
+      schema: z.object({
+        plan: z.array(
+          z.object({
+            reason: z.string().describe('Name the reasoning for this step'),
+            name: z.string().describe('Step name'),
+            task: z
+              .string()
+              .describe('What is the task to be done for this step?'),
+          }),
+        ),
+      }),
+    },
+  );
+  console.info('Response:', resComplexSchema.data);
 })();

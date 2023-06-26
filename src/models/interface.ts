@@ -1,12 +1,14 @@
-import { ChatRequestOptions, ChatResponse, ModelConfig } from '../types';
+import { z } from 'zod';
+
+import { RequestOptions, Response, ModelConfig } from '../types';
 
 export interface Model {
   modelConfig: ModelConfig;
 
-  request<T = any>(
+  request<T extends z.ZodType>(
     message: string,
-    opt?: ChatRequestOptions,
-  ): Promise<ChatResponse<T>>;
+    opt?: RequestOptions<T>,
+  ): Promise<Response<T>>;
 
   getTokensFromMessages(messages: string[]): number;
 }

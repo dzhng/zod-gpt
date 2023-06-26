@@ -7,6 +7,7 @@ import {
   CreateChatCompletionRequest,
   OpenAIApi,
 } from 'openai-edge';
+import { z } from 'zod';
 
 import {
   CompletionDefaultRetries,
@@ -117,10 +118,10 @@ export class OpenAI implements Model {
   }
 
   // eslint-disable-next-line complexity
-  async _request(
+  async _request<T extends z.ZodType>(
     messages: ChatCompletionRequestMessage[],
     requestOptions: ModelRequestOptions,
-  ): Promise<Response> {
+  ): Promise<Response<T>> {
     const finalRequestOptions = defaults(requestOptions, RequestDefaults);
     debug.log(
       `🔼 completion requested: ${JSON.stringify(
@@ -318,10 +319,10 @@ export class OpenAI implements Model {
     }
   }
 
-  async request(
+  async request<T extends z.ZodType>(
     message: string,
     requestOptions = {} as Partial<ModelRequestOptions>,
-  ): Promise<Response> {
+  ): Promise<Response<T>> {
     const messages: ChatCompletionRequestMessage[] = compact([
       requestOptions.systemMessage
         ? {
