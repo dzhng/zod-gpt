@@ -1,7 +1,7 @@
 {
   "name": "zod-gpt",
   "description": "Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions",
-  "version": "0.1.1",
+  "version": "0.5.0",
   "packageManager": "yarn@3.4.1",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -44,21 +44,16 @@
   },
   "dependencies": {
     "debug": "^4.3.4",
-    "js-tiktoken": "^1.0.7",
-    "jsonic": "^1.0.1",
-    "jsonrepair": "^3.2.0",
     "lodash": "^4.17.21",
-    "openai-edge": "^1.1.0",
-    "zod": "^3.21.4",
     "zod-to-json-schema": "^3.21.2"
   },
   "peerDependencies": {
+    "llm-api": "^0.6.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
     "@types/jest": "^29.5.0",
-    "@types/jsonic": "^0.3.1",
     "@types/lodash": "^4.14.191",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.5.0",
@@ -69,10 +64,12 @@
     "husky": "^8.0.2",
     "jest": "^29.5.0",
     "lint-staged": "^13.2.0",
+    "llm-api": "^0.6.0",
     "prettier": "^2.8.0",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "zod": "^3.21.4"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

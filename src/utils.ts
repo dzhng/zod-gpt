@@ -1,6 +1,7 @@
 import { debug as mDebug } from 'debug';
-import jsonic from 'jsonic';
-import { jsonrepair } from 'jsonrepair';
+import { omit } from 'lodash';
+import { z } from 'zod';
+import zodToJsonSchemaImpl from 'zod-to-json-schema';
 
 const error = mDebug('zod-gpt:error');
 const log = mDebug('zod-gpt:log');
@@ -22,8 +23,16 @@ export function sleep(delay: number) {
   });
 }
 
-export function parseUnsafeJson(json: string): any {
-  return jsonic(jsonrepair(json));
+export function zodToJsonSchema(schema: z.ZodType): any {
+  return omit(
+    zodToJsonSchemaImpl(schema, { $refStrategy: 'none' }),
+    '$ref',
+    '$schema',
+    'default',
+    'definitions',
+    'description',
+    'markdownDescription',
+  );
 }
 
 export type MaybePromise<T> = Promise<T> | T;

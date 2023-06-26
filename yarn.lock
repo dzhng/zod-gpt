@@ -1041,13 +1041,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonic@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@types/jsonic@npm:0.3.1"
-  checksum: d609a84dd5de68cb05e5382aa80d95452dc94e1f92ad0cf74535c4b3f1b18aa232aaaefc2a88c0da458024aeb8032c1caefd7045acf82e79a01b3e63b3a60828
-  languageName: node
-  linkType: hard
-
 "@types/lodash@npm:^4.14.191":
   version: 4.14.195
   resolution: "@types/lodash@npm:4.14.195"
@@ -4244,6 +4237,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"llm-api@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "llm-api@npm:0.6.0"
+  dependencies:
+    debug: ^4.3.4
+    js-tiktoken: ^1.0.7
+    jsonic: ^1.0.1
+    jsonrepair: ^3.2.0
+    lodash: ^4.17.21
+    openai-edge: ^1.1.0
+  checksum: 8c6945d3b7acf7ba18d451cfe55ac154fe77f9f640c10857c2483a0903b3f1c8022504326837f965a03e1f96a22f36e5f31b2923cb75207305fd224aac818e11
+  languageName: node
+  linkType: hard
+
 "locate-path@npm:^5.0.0":
   version: 5.0.0
   resolution: "locate-path@npm:5.0.0"
@@ -6179,7 +6186,6 @@ __metadata:
   dependencies:
     "@types/debug": ^4.1.7
     "@types/jest": ^29.5.0
-    "@types/jsonic": ^0.3.1
     "@types/lodash": ^4.14.191
     debug: ^4.3.4
     eslint: ^8.36.0
@@ -6190,12 +6196,9 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     husky: ^8.0.2
     jest: ^29.5.0
-    js-tiktoken: ^1.0.7
-    jsonic: ^1.0.1
-    jsonrepair: ^3.2.0
     lint-staged: ^13.2.0
+    llm-api: ^0.6.0
     lodash: ^4.17.21
-    openai-edge: ^1.1.0
     prettier: ^2.8.0
     ts-jest: ^29.0.5
     ts-node: ^10.9.1
@@ -6203,6 +6206,7 @@ __metadata:
     zod: ^3.21.4
     zod-to-json-schema: ^3.21.2
   peerDependencies:
+    llm-api: ^0.6.0
     zod: ^3.21.4
   languageName: unknown
   linkType: soft
