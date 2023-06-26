@@ -17,10 +17,10 @@ import { completion } from './src';
       description: z.string().describe('What does this startup do?'),
     }),
   });
-  console.info('Response: ', resStartup.data);
+  console.info('Response 1: ', resStartup.data);
 
   const resHello = await completion(openai, 'Hello');
-  console.info('Response:', resHello.data);
+  console.info('Response 2:', resHello.data);
 
   const resComplexSchema = await completion(
     openai,
@@ -39,5 +39,30 @@ import { completion } from './src';
       }),
     },
   );
-  console.info('Response:', resComplexSchema.data);
+  console.info('Response 3:', resComplexSchema.data);
+
+  const resBulletPoints = await completion(
+    openai,
+    'Generate a list of interesting areas of exploration about the renaissance',
+    {
+      schema: z.object({
+        topics: z
+          .array(
+            z.object({
+              title: z.string().describe('Title of the idea'),
+              reason: z.string().describe('Why you choose this idea'),
+              peopleInvolved: z
+                .string()
+                .describe(
+                  "If there any known figures that's related to this idea",
+                )
+                .optional(),
+            }),
+          )
+          .min(10)
+          .max(20),
+      }),
+    },
+  );
+  console.info('Response 4:', resBulletPoints.data);
 })();

@@ -1,10 +1,9 @@
 import { TokenError, CompletionApi } from 'llm-api';
-import { defaults, get, omit } from 'lodash';
+import { defaults } from 'lodash';
 import { z } from 'zod';
-import zodToJsonSchema from 'zod-to-json-schema';
 
 import type { RequestOptions, Response } from './types';
-import { debug } from './utils';
+import { debug, zodToJsonSchema } from './utils';
 
 const FunctionName = 'print';
 const FunctionDescription =
@@ -30,11 +29,7 @@ export async function completion<T extends z.ZodType = z.ZodString>(
             {
               name: FunctionName,
               description: FunctionDescription,
-              parameters: omit(
-                zodToJsonSchema(_opt?.schema, { $refStrategy: 'none' }),
-                '$schema',
-                '$ref',
-              ),
+              parameters: zodToJsonSchema(_opt.schema),
             },
           ]
         : undefined,
@@ -67,7 +62,10 @@ export async function completion<T extends z.ZodType = z.ZodString>(
         if (opt.autoHeal) {
           debug.log('⚠️ function not called, autohealing...');
           response = await response.respond(
-            `Please respond with a call to the ${FunctionName} function`,
+            {
+              role: 'user',
+              content: `Please respond with a call to the ${FunctionName} function`,
+            },
             opt,
           );
 
@@ -86,20 +84,26 @@ export async function completion<T extends z.ZodType = z.ZodString>(
           data: res.data,
         };
       } else {
+        debug.error('⚠️ error parsing response', res.error);
         if (opt.autoHeal) {
           debug.log('⚠️ response parsing failed, autohealing...', res.error);
           const issuesMessage = res.error.issues.reduce(
             (prev, issue) =>
               issue.path && issue.path.length > 0
-                ? `${prev}\nThere is an issue with the the value "${JSON.stringify(
-                    get(response.arguments, issue.path),
-                  )}", at path ${issue.path.join('.')}. The issue is: ${
-                    issue.message
-                  }`
-                : `\nThe issue is: ${issue.message}`,
+                ? `${prev}\nThere is an issue at path ${issue.path.join(
+                    '.',
+                  )}. The issue is: ${issue.message}.`
+                : `\nThe issue is: ${issue.message}.`,
             `There is an issue with that response, please rewrite by calling the ${FunctionName} function with the correct parameters.`,
           );
-          response.respond(issuesMessage, opt);
+          response = await response.respond(
+            { role: 'user', content: issuesMessage },
+            opt,
+          );
+
+          if (!response.arguments) {
+            throw new Error('Response schema autoheal failed');
+          }
         } else {
           throw new Error('Response parsing failed');
         }

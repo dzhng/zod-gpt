@@ -76,7 +76,7 @@ const response = await completion(openai, 'hello');
 console.log(response.data);
 ```
 
-To add schema parsing and typing, simply add a `schema` key in the options argument.
+To add schema parsing and typing, simply add a `schema` key in the options argument. **Make sure to add a description to each key via the `describe` method.** The descriptions will be fed into the model to ensure that it understand exactly what data is requested for each key. Try to error on the side of being over descriptive to ensure the model understands exactly.
 
 ```typescript
 const response = await completion(
