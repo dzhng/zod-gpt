@@ -1,7 +1,7 @@
 import { debug as mDebug } from 'debug';
 
-const error = mDebug('llamaflow:error');
-const log = mDebug('llamaflow:log');
+const error = mDebug('zodgpt:error');
+const log = mDebug('zodgpt:log');
 // eslint-disable-next-line no-console
 log.log = console.log.bind(console);
 
@@ -10,7 +10,7 @@ export const debug = {
   log,
   write: (t: string) =>
     process.env.DEBUG &&
-    'llamaflow:log'.match(process.env.DEBUG) &&
+    'zodgpt:log'.match(process.env.DEBUG) &&
     process.stdout.write(t),
 };
 

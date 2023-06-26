@@ -21,6 +21,8 @@ export interface ModelConfig {
   frequencyPenalty?: number;
   logitBias?: Record<string, number>;
   user?: string;
+
+  // NOTE: this flag currently does not work with OpenAI functions, do NOT use
   stream?: boolean;
 }
 

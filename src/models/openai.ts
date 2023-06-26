@@ -156,7 +156,7 @@ export class OpenAI implements Model {
       );
       const completion = await this._model.createChatCompletion(
         {
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-3.5-turbo-0613',
           ...convertConfig(this.modelConfig),
           functions: finalRequestOptions.functions,
           function_call: finalRequestOptions.callFunction
