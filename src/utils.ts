@@ -1,4 +1,6 @@
 import { debug as mDebug } from 'debug';
+import jsonic from 'jsonic';
+import { jsonrepair } from 'jsonrepair';
 
 const error = mDebug('zodgpt:error');
 const log = mDebug('zodgpt:log');
@@ -18,6 +20,10 @@ export function sleep(delay: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
   });
+}
+
+export function parseUnsafeJson(json: string): any {
+  return jsonic(jsonrepair(json));
 }
 
 export type MaybePromise<T> = Promise<T> | T;

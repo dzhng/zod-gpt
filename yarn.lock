@@ -4143,6 +4143,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsonrepair@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "jsonrepair@npm:3.2.0"
+  bin:
+    jsonrepair: bin/cli.js
+  checksum: a3acb1ceec44c8fb5a3cb993734c6ca71b71f5e3b29cd69e023c94e2ae0c12472fc0263c535df457e86a52dce2199a854b48d931298e9bc7f0102fa1f844ed46
+  languageName: node
+  linkType: hard
+
 "jsx-ast-utils@npm:^2.4.1 || ^3.0.0":
   version: 3.3.3
   resolution: "jsx-ast-utils@npm:3.3.3"
@@ -6183,6 +6192,7 @@ __metadata:
     jest: ^29.5.0
     js-tiktoken: ^1.0.7
     jsonic: ^1.0.1
+    jsonrepair: ^3.2.0
     lint-staged: ^13.2.0
     lodash: ^4.17.21
     openai-edge: ^1.1.0

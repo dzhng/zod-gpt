@@ -16,7 +16,7 @@ const Defaults = {
   autoSlice: false,
 };
 
-export async function request<T extends z.ZodType = z.ZodString>(
+export async function completion<T extends z.ZodType = z.ZodString>(
   model: Model,
   prompt: string | (() => string),
   _opt?: Partial<RequestOptions<T>>,
@@ -54,7 +54,7 @@ export async function request<T extends z.ZodType = z.ZodString>(
   debug.log('⬆️ sending request:', message);
 
   try {
-    let response = await model.request(message, opt);
+    let response = await model.textCompletion(message, opt);
     if (!response) {
       throw new Error('Chat request failed');
     }
@@ -122,7 +122,7 @@ export async function request<T extends z.ZodType = z.ZodString>(
       debug.log(
         `⚠️ Request prompt too long, splitting text with chunk size of ${chunkSize}`,
       );
-      return request(model, message.slice(0, chunkSize), opt);
+      return completion(model, message.slice(0, chunkSize), opt);
     } else {
       throw e;
     }

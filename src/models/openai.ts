@@ -1,5 +1,4 @@
 import tiktoken from 'js-tiktoken';
-import jsonic from 'jsonic';
 import { compact, defaults } from 'lodash';
 import {
   ChatCompletionRequestMessage,
@@ -22,7 +21,7 @@ import type {
   OpenAIConfigurationParameters,
   ModelFunction,
 } from '../types';
-import { debug, sleep } from '../utils';
+import { debug, parseUnsafeJson, sleep } from '../utils';
 
 import { TokenError } from './errors';
 import type { Model } from './interface';
@@ -52,7 +51,7 @@ const convertConfig = (
   stream: config.stream,
 });
 
-export class OpenAI implements Model {
+export class OpenAIChatApi implements Model {
   _model: OpenAIApi;
   _isAzure: boolean;
   _headers?: Record<string, string>;
@@ -96,10 +95,10 @@ export class OpenAI implements Model {
     this.modelConfig = modelConfig ?? {};
   }
 
-  getTokensFromMessages(messages: string[], functions?: ModelFunction[]) {
+  getTokensFromPrompt(promptOrMessages: string[], functions?: ModelFunction[]) {
     let numTokens = 0;
 
-    for (const message of messages) {
+    for (const message of promptOrMessages) {
       numTokens += 5; // every message follows <im_start>{role/name}\n{content}<im_end>\n
       numTokens += encoder.encode(message).length;
     }
@@ -118,7 +117,7 @@ export class OpenAI implements Model {
   }
 
   // eslint-disable-next-line complexity
-  async _request<T extends z.ZodType>(
+  async chatCompletion<T extends z.ZodType>(
     messages: ChatCompletionRequestMessage[],
     requestOptions: ModelRequestOptions,
   ): Promise<Response<T>> {
@@ -138,7 +137,7 @@ export class OpenAI implements Model {
           finalRequestOptions.minimumResponseTokens
         : 1_000_000;
 
-      const messageTokens = this.getTokensFromMessages(
+      const messageTokens = this.getTokensFromPrompt(
         messages.map((m) => m.content ?? ''),
         finalRequestOptions.functions,
       );
@@ -184,7 +183,7 @@ export class OpenAI implements Model {
             `Completion rate limited (${completion.status}), retrying... attempts left: ${finalRequestOptions.retries}`,
           );
           await sleep(finalRequestOptions.retryInterval);
-          return this._request(messages, {
+          return this.chatCompletion(messages, {
             ...finalRequestOptions,
             retries: finalRequestOptions.retries - 1,
             // double the interval everytime we retry
@@ -214,7 +213,7 @@ export class OpenAI implements Model {
                 continue;
               }
 
-              const parsed = jsonic(cleaned);
+              const parsed = parseUnsafeJson(cleaned);
               const text = parsed.choices[0].delta.content ?? '';
 
               debug.write(text);
@@ -249,7 +248,7 @@ export class OpenAI implements Model {
         return {
           data: undefined,
           respond: (prompt, opt) =>
-            this._request(
+            this.chatCompletion(
               [
                 ...messages,
                 { role: 'assistant', content },
@@ -270,7 +269,7 @@ export class OpenAI implements Model {
         return {
           data: undefined,
           respond: (prompt, opt) =>
-            this._request(
+            this.chatCompletion(
               [
                 ...messages,
                 { role: 'assistant', function_call: functionCall },
@@ -279,7 +278,7 @@ export class OpenAI implements Model {
               opt,
             ),
           name: functionCall.name,
-          arguments: jsonic(functionCall.arguments),
+          arguments: parseUnsafeJson(functionCall.arguments),
           usage: usage
             ? {
                 totalTokens: usage.total_tokens,
@@ -307,7 +306,7 @@ export class OpenAI implements Model {
           `Completion timed out (${error.code}), retrying... attempts left: ${finalRequestOptions.retries}`,
         );
         await sleep(finalRequestOptions.retryInterval);
-        return this._request(messages, {
+        return this.chatCompletion(messages, {
           ...finalRequestOptions,
           retries: finalRequestOptions.retries - 1,
           // double the interval everytime we retry
@@ -319,8 +318,8 @@ export class OpenAI implements Model {
     }
   }
 
-  async request<T extends z.ZodType>(
-    message: string,
+  async textCompletion<T extends z.ZodType>(
+    prompt: string,
     requestOptions = {} as Partial<ModelRequestOptions>,
   ): Promise<Response<T>> {
     const messages: ChatCompletionRequestMessage[] = compact([
@@ -333,8 +332,8 @@ export class OpenAI implements Model {
                 : requestOptions.systemMessage(),
           }
         : undefined,
-      { role: 'user', content: message },
+      { role: 'user', content: prompt },
     ]);
-    return this._request(messages, requestOptions);
+    return this.chatCompletion(messages, requestOptions);
   }
 }

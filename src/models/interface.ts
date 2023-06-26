@@ -5,10 +5,15 @@ import { RequestOptions, Response, ModelConfig } from '../types';
 export interface Model {
   modelConfig: ModelConfig;
 
-  request<T extends z.ZodType>(
-    message: string,
+  chatCompletion<T extends z.ZodType>(
+    messages: any[],
     opt?: RequestOptions<T>,
   ): Promise<Response<T>>;
 
-  getTokensFromMessages(messages: string[]): number;
+  textCompletion<T extends z.ZodType>(
+    prompt: string,
+    opt?: RequestOptions<T>,
+  ): Promise<Response<T>>;
+
+  getTokensFromPrompt(promptOrMessages: string[]): number;
 }
