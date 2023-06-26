@@ -1,6 +1,7 @@
+import { OpenAIChatApi } from 'llm-api';
 import { z } from 'zod';
 
-import { OpenAIChatApi, completion } from './src';
+import { completion } from './src';
 
 (async function go() {
   const openai = new OpenAIChatApi(
