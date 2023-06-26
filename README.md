@@ -11,7 +11,6 @@ Get structured, fully typed JSON outputs from OpenAI's new 0613 models via funct
   - [Auto Healing](#-auto-healing)
   - [Text Slicing](#-text-slicing)
 - [Debugging](#-debugging)
-- [Azure](#-azure)
 - [API Reference](#-api-reference)
 
 ## 👋 Introduction
@@ -20,12 +19,13 @@ ZodGPT is a library for
 
 - Receiving structured outputs from models with complete type safety. All responses are fully validated & typed, works with [zod](https://github.com/colinhacks/zod) as a peer dep.
 - Schema definition, serialization / parsing, and **automatically asking the model to correct outputs**.
-- Handle rate limit and any other API errors as gracefully as possible (e.g. exponential backoff for rate-limit).
+- Handle rate limit and any other API errors as gracefully as possible (e.g. exponential backoff for rate-limit) via `llm-api`.
 
-With ZodGPT, you can simply query OpenAI's ChatGPT model like so:
+With `zod-gpt`, you can simply query OpenAI's ChatGPT model like so:
 
 ```typescript
-import { OpenAIChatApi, completion } from 'zod-gpt';
+import { OpenAIChatApi } from 'llm-api';
+import { completion } from 'zod-gpt';
 
 const openai = new OpenAIChatApi({ apiKey: 'YOUR_OPENAI_KEY' });
 
@@ -54,7 +54,7 @@ npm i zod-gpt
 yarn add zod-gpt
 ```
 
-To setup in your codebase, initialize a new instance with the model you want (only `OpenAIChatApi` is suported for now). Note that you can also add default model config (like temperature, timeouts, retries) when initializing.
+To setup in your codebase, initialize a new instance with the model you want via the `llm-api` peer dep. Note that `zod-gpt` is designed to work with any models that implements the `CompletionApi` interface, so you can also import your own API wrapper.
 
 ```typescript
 import { OpenAIChatApi } from 'zod-gpt';
@@ -105,47 +105,31 @@ NOTE: the `schema` key ONLY takes object type schemas - this is a limitation of 
 
 ### 🧑‍⚕️ Auto Healing
 
-By default, ZodGPT has logic to automatically detect and heal any schema errors via self-reflection (e.g. if the function api is not being used correctly, if the schema has parse errors.. etc). This means whenever these types of errors happen, ZodGPT will send a new message to re-ask the model to correct its own output, together with any error messages it gathered from parsing.
+By default, `zod-gpt` has logic to automatically detect and heal any schema errors via self-reflection (e.g. if the function api is not being used correctly, if the schema has parse errors.. etc). This means whenever these types of errors happen, `zod-gpt` will send a new message to re-ask the model to correct its own output, together with any error messages it gathered from parsing.
 
 The logic is simple but incredabily powerful, and adds a layer of reliability to model outputs. I suggest leaving this flag set to true (its default setting), unless if token usage or response time becomes a real issue.
 
 ### 📃 Text Slicing
 
-A common error with LLM APIs is token usage - you are only allowed to fit a certain amount of data in the context window. In the case of ZodGPT, this means you are limited in the length of the content of the messages.
-
-If you set a `contextSize` key, ZodGPT will automatically determine if the request will breach the token limit BEFORE sending the actual request to the model provider (e.g. OpenAI). This will save one network round-trip call and let you handle these type of errors in a responsive manner.
+A common way to handle token limit issues is to split your content. `zod-gpt` provides an `autoSlice` option to automatically split your text when a token overflow error from `llm-api` is detected. It's smart enough to only split your text if it determines that it is above the token limit, and will try to preserve as much of the original text as possible.
 
 ```typescript
 const openai = new OpenAIChatApi(
   { apiKey: 'YOUR_OPENAI_KEY' },
-  { model: 'gpt-4-0613' },
+  // make sure `contextSize` is set to enable throwing TokenErrors
+  { model: 'gpt-4-0613', contextSize: 8129 },
 );
 
-try {
-  const res = await completion(...);
-} catch (e) {
-  if (e instanceof TokenError) {
-    // handle token errors...
-  }
-}
-```
-
-A common way to handle token limit issues is to split your content. ZodGPT provides an `autoSlice` option to automatically split your text when a token overflow error is detected. It's smart enough to only split your text if it determines that it is above the token limit, and will try to preserve as much of the original text as possible.
-
-```typescript
 const response = await completion(
   openai,
   'hello world, testing overflow logic',
-  {
-    // make sure `contextSize` is set when this flag is enabled
-    autoSlice: true,
-  },
+  { autoSlice: true },
 );
 ```
 
 ## 🤓 Debugging
 
-ZodGPT usese the `debug` module for logging & error messages. To run in debug mode, set the `DEBUG` env variable:
+`zod-gpt` uses the `debug` module for logging & error messages. To run in debug mode, set the `DEBUG` env variable:
 
 `DEBUG=zod-gpt:* yarn playground`
 
@@ -154,70 +138,22 @@ You can also specify different logging types via:
 `DEBUG=zod-gpt:error yarn playground`
 `DEBUG=zod-gpt:log yarn playground`
 
-## 🔷 Azure
-
-ZodGPT also comes with support for Azure's OpenAI models. The Azure version is usually much faster and more reliable than OpenAI's own API endpoints. In order to use the Azure endpoints, you must include 2 Azure specific options when initializing the OpenAI model, `azureDeployment` and `azureEndpoint`. The `apiKey` field will also now be used for the Azure API key.
-
-You can find the Azure API key and endpoint in the [Azure Portal](https://portal.azure.com/). The Azure Deployment must be created under the [Azure AI Portal](https://oai.azure.com/).
-
-Note that the `model` parameter in `ModelConfig` will be ignored when using Azure. This is because in the Azure system, the `model` is selected on deployment creation, not on run time.
-
-```typescript
-const model = new OpenAIChatApi({
-  apiKey: 'AZURE_OPENAI_KEY',
-  azureDeployment: 'AZURE_DEPLOYMENT_NAME',
-  azureEndpoint: 'AZURE_ENDPOINT',
-});
-```
-
 ## ✅ API Reference
 
-### Model
+### LLM Provider Support
 
-The only model ZodGPT supports currently is OpenAI's chat based models.
+`zod-gpt` currently users the [llm-api](https://github.com/dzhng/llm-api) library to support multiple LLM providers. Check the `llm-api` documentation on how to configure model parameters.
 
-```typescript
-const model = new OpenAI(openAiConfig, modelConfig);
-```
-
-#### OpenAI Config
-
-```typescript
-interface OpenAIConfig {
-  apiKey: string;
-}
-```
-
-#### Model Config
-
-These model config map to OpenAI's config directly, see doc:
-https://platform.openai.com/docs/api-reference/chat/create
-
-```typescript
-interface ModelConfig {
-  model?: string;
-  contextSize?: number;
-  maxTokens?: number;
-  temperature?: number;
-  topP?: number;
-  stop?: string | string[];
-  presencePenalty?: number;
-  frequencyPenalty?: number;
-  logitBias?: Record<string, number>;
-  user?: string;
-}
-```
-
-#### Request
+#### Completion
 
 To send a completion request to a model:
 
 ```typescript
-const res: Response = await request(model, prompt, options: RequestOptions);
+const res: Response = await completion(model, prompt, options: RequestOptions);
 ```
 
 **options**
-You can override the default request options via this parameter. A request will automatically be retried if there is a ratelimit or server error.
+You can override the default request options via this parameter. The `RequestOptions` object extends the request options defined in `llm-api`.
 
 ```typescript
 type RequestOptions = {
@@ -248,7 +184,7 @@ type RequestOptions = {
 
 #### Response
 
-Completion responses are in the following format:
+Completion responses extends the model responses from `llm-api`, specifically adding a `data` field for the pased JSON that's automatically typed according to the input `zod` schema.
 
 ```typescript
 interface Response<T extends z.ZodType> {
@@ -268,18 +204,6 @@ interface Response<T extends z.ZodType> {
 ```
 
 ### Misc
-
-Note that if you want to bypass ZodGPT's request management logic, and send a request to the underlaying model directly, you can call the `request` method directly on the model. This will bypass the automatic schema and function definition logic, and let you work with the vanilla OpenAI completion API, while still retaining the logic of ratelimiting & timeout retries.
-
-```typescript
-const openai = new OpenAIChatApi(openAiConfig, modelConfig);
-
-// send one prompt
-const res = await openai.textCompletion(prompt: string, options: ModelRequestOptions);
-
-// send an array of messages (similar to vanilla completion api)
-const res = await openai.chatCompletion(messages: Message[], options: ModelRequestOptions);
-```
 
 #### Text Splitting
 

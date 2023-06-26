@@ -1,9 +1,8 @@
+import { TokenError, CompletionApi } from 'llm-api';
 import { defaults, get, omit } from 'lodash';
 import { z } from 'zod';
 import zodToJsonSchema from 'zod-to-json-schema';
 
-import { TokenError } from './models/errors';
-import { CompletionApi } from './models/interface';
 import type { RequestOptions, Response } from './types';
 import { debug } from './utils';
 
