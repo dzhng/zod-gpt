@@ -33,7 +33,8 @@ import { completion } from './src';
             name: z.string().describe('Step name'),
             task: z
               .string()
-              .describe('What is the task to be done for this step?'),
+              .describe('What is the task to be done for this step?')
+              .optional(),
           }),
         ),
       }),

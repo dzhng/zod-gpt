@@ -108,6 +108,13 @@ export async function completion<T extends z.ZodType = z.ZodString>(
           throw new Error('Response parsing failed');
         }
       }
+
+      // TODO: there is definitely a cleaner way to implement this to avoid the duplicate parsing
+      const data = opt.schema.parse(response.arguments);
+      return {
+        ...response,
+        data,
+      };
     }
 
     // if no schema is defined, default to string
