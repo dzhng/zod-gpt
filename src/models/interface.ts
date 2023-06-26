@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { RequestOptions, Response, ModelConfig } from '../types';
 
-export interface Model {
+export interface CompletionApi {
   modelConfig: ModelConfig;
 
   chatCompletion<T extends z.ZodType>(

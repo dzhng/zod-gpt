@@ -24,7 +24,7 @@ import type {
 import { debug, parseUnsafeJson, sleep } from '../utils';
 
 import { TokenError } from './errors';
-import type { Model } from './interface';
+import type { CompletionApi } from './interface';
 
 const RequestDefaults = {
   retries: CompletionDefaultRetries,
@@ -51,7 +51,7 @@ const convertConfig = (
   stream: config.stream,
 });
 
-export class OpenAIChatApi implements Model {
+export class OpenAIChatApi implements CompletionApi {
   _model: OpenAIApi;
   _isAzure: boolean;
   _headers?: Record<string, string>;

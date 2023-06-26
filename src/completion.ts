@@ -3,7 +3,7 @@ import { z } from 'zod';
 import zodToJsonSchema from 'zod-to-json-schema';
 
 import { TokenError } from './models/errors';
-import { Model } from './models/interface';
+import { CompletionApi } from './models/interface';
 import type { RequestOptions, Response } from './types';
 import { debug } from './utils';
 
@@ -17,7 +17,7 @@ const Defaults = {
 };
 
 export async function completion<T extends z.ZodType = z.ZodString>(
-  model: Model,
+  model: CompletionApi,
   prompt: string | (() => string),
   _opt?: Partial<RequestOptions<T>>,
 ): Promise<Response<T>> {
