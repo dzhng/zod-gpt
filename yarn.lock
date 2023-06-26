@@ -4244,6 +4244,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"llm-api@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "llm-api@npm:0.5.0"
+  dependencies:
+    debug: ^4.3.4
+    js-tiktoken: ^1.0.7
+    jsonic: ^1.0.1
+    jsonrepair: ^3.2.0
+    lodash: ^4.17.21
+    openai-edge: ^1.1.0
+  checksum: 558750aa3d1133b262ef2a9a8546439ba5f885c58cc98eaac5769d72a5936e8d62b7f0e8964b517689402ab82e4d7f74208be847aee4b5b71915b2639301c22d
+  languageName: node
+  linkType: hard
+
 "locate-path@npm:^5.0.0":
   version: 5.0.0
   resolution: "locate-path@npm:5.0.0"
@@ -6194,6 +6208,7 @@ __metadata:
     jsonic: ^1.0.1
     jsonrepair: ^3.2.0
     lint-staged: ^13.2.0
+    llm-api: ^0.5.0
     lodash: ^4.17.21
     openai-edge: ^1.1.0
     prettier: ^2.8.0
