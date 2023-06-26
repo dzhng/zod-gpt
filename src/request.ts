@@ -32,7 +32,7 @@ export async function completion<T extends z.ZodType = z.ZodString>(
               name: FunctionName,
               description: FunctionDescription,
               parameters: omit(
-                zodToJsonSchema(_opt?.schema),
+                zodToJsonSchema(_opt?.schema, { $refStrategy: 'none' }),
                 '$schema',
                 '$ref',
               ),
