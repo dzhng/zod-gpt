@@ -8,7 +8,7 @@ Get structured, fully typed JSON outputs from OpenAI's new 0613 models via funct
 - [Usage](#-usage)
   - [Install](#install)
   - [Request](#request)
-  - [Auto healing](#-auto-healing)
+  - [Auto Healing](#-auto-healing)
   - [Text Slicing](#-text-slicing)
 - [Debugging](#-debugging)
 - [Azure](#-azure)
