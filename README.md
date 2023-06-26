@@ -105,9 +105,9 @@ NOTE: the `schema` key ONLY takes object type schemas - this is a limitation of 
 
 ### 🧑‍⚕️ Auto Healing
 
-By default, ZodGPT has a reflection based logic to automatically detect and heal any schema errors (e.g. if the function api is not being used correctly, if the schema has parse errors.. etc). This means whenever these types of errors happen, ZodGPT will send a new message to re-ask the model to correct its own output, together with any error messages it gathered from parsing.
+By default, ZodGPT has logic to automatically detect and heal any schema errors via self-reflection (e.g. if the function api is not being used correctly, if the schema has parse errors.. etc). This means whenever these types of errors happen, ZodGPT will send a new message to re-ask the model to correct its own output, together with any error messages it gathered from parsing.
 
-The logic is simple but incredabily powerful, and adds a layer of reliability model outputs. I suggest leaving this flag set to true (its default setting), unless if token usage or response time is a blocking issue.
+The logic is simple but incredabily powerful, and adds a layer of reliability to model outputs. I suggest leaving this flag set to true (its default setting), unless if token usage or response time becomes a real issue.
 
 ### 📃 Text Slicing
 
