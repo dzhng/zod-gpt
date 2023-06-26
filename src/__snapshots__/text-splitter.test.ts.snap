@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecursiveCharacterTextSplitter Should correctly spilt text by seperators 1`] = `
+[
+  "Hello world",
+  "this is a test of the recursive text splitter",
+]
+`;
+
+exports[`RecursiveCharacterTextSplitter Should correctly spilt text by seperators 2`] = `
+[
+  "Hello world, this is a test of the recursive text splitter",
+  "If I have a period, it should split along the period.",
+]
+`;
+
+exports[`RecursiveCharacterTextSplitter Should correctly spilt text by seperators 3`] = `
+[
+  "Hello world, this is a test of the recursive text splitter",
+  "If I have a period, it should split along the period.",
+  "Or, if there is a new line, it should prioritize splitting on new lines instead.",
+]
+`;
+
+exports[`RecursiveCharacterTextSplitter Should correctly spilt text by seperators 4`] = `
+[
+  58,
+  53,
+  80,
+]
+`;
