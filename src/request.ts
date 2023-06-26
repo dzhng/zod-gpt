@@ -44,6 +44,13 @@ export async function request<T extends z.ZodType = z.ZodString>(
     Defaults,
   );
 
+  if (
+    opt.schema &&
+    (opt.schema._def as any).typeName !== z.ZodFirstPartyTypeKind.ZodObject
+  ) {
+    throw new Error('Schemas can ONLY be an object');
+  }
+
   debug.log('⬆️ sending request:', message);
 
   try {
