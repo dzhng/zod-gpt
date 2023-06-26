@@ -54,7 +54,7 @@ npm i zod-gpt
 yarn add zod-gpt
 ```
 
-To setup in your codebase, initialize a new instance with the model you want (only `OpenAI` is suported for now). Note that you can also add default model and chat config (like temperature, timeouts, retries) when initializing. These are just defaults, and can always be overwritten later on a per-chat or per-request basis.
+To setup in your codebase, initialize a new instance with the model you want (only `OpenAI` is suported for now). Note that you can also add default model config (like temperature, timeouts, retries) when initializing.
 
 ```typescript
 import { OpenAI } from 'zod-gpt';
