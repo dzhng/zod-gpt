@@ -147,12 +147,12 @@ const response = await completion(
 
 ZodGPT usese the `debug` module for logging & error messages. To run in debug mode, set the `DEBUG` env variable:
 
-`DEBUG=zodgpt:* yarn playground`
+`DEBUG=zod-gpt:* yarn playground`
 
 You can also specify different logging types via:
 
-`DEBUG=zodgpt:error yarn playground`
-`DEBUG=zodgpt:log yarn playground`
+`DEBUG=zod-gpt:error yarn playground`
+`DEBUG=zod-gpt:log yarn playground`
 
 ## 🔷 Azure
 

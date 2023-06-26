@@ -2,8 +2,8 @@ import { debug as mDebug } from 'debug';
 import jsonic from 'jsonic';
 import { jsonrepair } from 'jsonrepair';
 
-const error = mDebug('zodgpt:error');
-const log = mDebug('zodgpt:log');
+const error = mDebug('zod-gpt:error');
+const log = mDebug('zod-gpt:log');
 // eslint-disable-next-line no-console
 log.log = console.log.bind(console);
 
@@ -12,7 +12,7 @@ export const debug = {
   log,
   write: (t: string) =>
     process.env.DEBUG &&
-    'zodgpt:log'.match(process.env.DEBUG) &&
+    'zod-gpt:log'.match(process.env.DEBUG) &&
     process.stdout.write(t),
 };
 
