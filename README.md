@@ -206,7 +206,7 @@ interface ModelConfig {
 
 #### Request
 
-To send a request to a chat session:
+To send a completion request to a model:
 
 ```typescript
 const res: Response = await request(model, prompt, options: RequestOptions);
@@ -244,7 +244,7 @@ type RequestOptions = {
 
 #### Response
 
-Chat responses are in the following format:
+Completion responses are in the following format:
 
 ```typescript
 interface Response<T extends z.ZodType> {
