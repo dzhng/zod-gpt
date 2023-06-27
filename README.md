@@ -4,7 +4,7 @@
 
 Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions.
 
-Under the hood, `zod-gpt` uses functions (and the `call_function` param to coerce the model to always respond as function calls. Add self-reflection for reliability and zod for parsing & typing.
+Under the hood, `zod-gpt` uses functions to coerce the model to always respond as function calls. Add self-reflection for reliability and zod for parsing & typing.
 
 - [Introduction](#-introduction)
 - [Usage](#-usage)
