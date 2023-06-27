@@ -21,7 +21,7 @@ ZodGPT is a library for
 
 - Receiving structured outputs from models with complete type safety. All responses are fully validated & typed, works with [zod](https://github.com/colinhacks/zod) as a peer dep.
 - Schema definition, serialization / parsing, and **automatically asking the model to correct outputs**.
-- Handle rate limit and any other API errors as gracefully as possible (e.g. exponential backoff for rate-limit) via `llm-api`.
+- Handle rate limit and any other API errors as gracefully as possible (e.g. exponential backoff for rate-limit) via [llm-api](https://github.com/dzhng/llm-api).
 
 With `zod-gpt`, you can simply query OpenAI's ChatGPT model like so:
 
