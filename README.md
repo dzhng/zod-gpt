@@ -2,7 +2,9 @@
 
 [![test](https://github.com/dzhng/zod-gpt/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/dzhng/zod-gpt/actions/workflows/test.yml)
 
-Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions. Under the hood, `zod-gpt` uses functions (and the `call_function` param to coerce the model to always respond as function calls. Add self-reflection for reliability and zod for parsing & typing.
+Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions.
+
+Under the hood, `zod-gpt` uses functions (and the `call_function` param to coerce the model to always respond as function calls. Add self-reflection for reliability and zod for parsing & typing.
 
 - [Introduction](#-introduction)
 - [Usage](#-usage)
