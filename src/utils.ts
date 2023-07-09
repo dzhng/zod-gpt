@@ -32,16 +32,21 @@ const extractJSONArrayResponse = (res: string): string | undefined =>
   res.match(/\[(.|\n)*\]/g)?.[0];
 
 export function parseUnsafeJson(json: string): any {
-  const potientialArray = extractJSONArrayResponse(json);
-  const potientialObject = extractJSONObjectResponse(json);
-  // extract the larger text between potiential array and potiential object, we want the parent json object
-  const extracted =
-    (potientialArray?.length ?? 0) > (potientialObject?.length ?? 0)
-      ? potientialArray
-      : potientialObject;
-  if (extracted) {
-    return jsonic(jsonrepair(extracted));
-  } else {
+  try {
+    const potientialArray = extractJSONArrayResponse(json);
+    const potientialObject = extractJSONObjectResponse(json);
+    // extract the larger text between potiential array and potiential object, we want the parent json object
+    const extracted =
+      (potientialArray?.length ?? 0) > (potientialObject?.length ?? 0)
+        ? potientialArray
+        : potientialObject;
+    if (extracted) {
+      return jsonic(jsonrepair(extracted));
+    } else {
+      return undefined;
+    }
+  } catch (e) {
+    debug.error('⚠️ error parsing unsafe json: ', json, e);
     return undefined;
   }
 }

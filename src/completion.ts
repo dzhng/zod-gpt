@@ -61,7 +61,7 @@ export async function completion<T extends z.ZodType = z.ZodString>(
       isAnthropic && _opt?.schema
         ? await model.textCompletion(message, {
             ...opt,
-            systemMessage: `You will respond to ALL human messages in JSON. Make sure the response follow the following JSON schema specifications: ${schemaInstructions}\n\n${
+            systemMessage: `You will respond to ALL human messages in JSON. Make sure the response correctly follow the following JSON schema specifications: ${schemaInstructions}\n\n${
               opt.systemMessage ?? ''
             }`,
             responsePrefix,
@@ -112,12 +112,12 @@ export async function completion<T extends z.ZodType = z.ZodString>(
           const issuesMessage = res.error.issues.reduce(
             (prev, issue) =>
               issue.path && issue.path.length > 0
-                ? `${prev}\nThere is an issue at path ${issue.path.join(
-                    '.',
-                  )}. The issue is: ${issue.message}.`
+                ? `${prev}\nThe issue is at path ${issue.path.join('.')}: ${
+                    issue.message
+                  }.`
                 : `\nThe issue is: ${issue.message}.`,
             isAnthropic
-              ? `There is an issue with that response, please rewrite by following the JSON schema exactly: ${schemaInstructions}`
+              ? `There is an issue with that response, please follow the JSON schema EXACTLY, the output must be valid parsable JSON: ${schemaInstructions}`
               : `There is an issue with that response, please rewrite by calling the ${FunctionName} function with the correct parameters.`,
           );
           response = await response.respond(issuesMessage);
