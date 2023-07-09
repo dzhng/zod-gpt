@@ -1,4 +1,6 @@
 import { debug as mDebug } from 'debug';
+import jsonic from 'jsonic';
+import { jsonrepair } from 'jsonrepair';
 import { omit } from 'lodash';
 import { z } from 'zod';
 import zodToJsonSchemaImpl from 'zod-to-json-schema';
@@ -21,6 +23,27 @@ export function sleep(delay: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
   });
+}
+
+const extractJSONObjectResponse = (res: string): string | undefined =>
+  res.match(/\{(.|\n)*\}/g)?.[0];
+
+const extractJSONArrayResponse = (res: string): string | undefined =>
+  res.match(/\[(.|\n)*\]/g)?.[0];
+
+export function parseUnsafeJson(json: string): any {
+  const potientialArray = extractJSONArrayResponse(json);
+  const potientialObject = extractJSONObjectResponse(json);
+  // extract the larger text between potiential array and potiential object, we want the parent json object
+  const extracted =
+    (potientialArray?.length ?? 0) > (potientialObject?.length ?? 0)
+      ? potientialArray
+      : potientialObject;
+  if (extracted) {
+    return jsonic(jsonrepair(extracted));
+  } else {
+    return undefined;
+  }
 }
 
 export function zodToJsonSchema(schema: z.ZodType): any {

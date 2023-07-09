@@ -37,14 +37,19 @@
     "react/require-default-props": "off",
     "no-param-reassign": "off",
     "import/no-anonymous-default-export": "off",
-    "complexity": ["warn", 20],
     "import/no-named-as-default": "off",
     "import/no-named-as-default-member": "off",
     "import/order": [
       "error",
       {
         "newlines-between": "always",
-        "groups": [["builtin", "external"], "internal", "parent", "sibling", "index"],
+        "groups": [
+          ["builtin", "external"],
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
         "pathGroups": [
           {
             "pattern": "~/**",

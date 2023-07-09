@@ -1,17 +1,27 @@
-import { OpenAIChatApi } from 'llm-api';
+import { AnthropicChatApi, OpenAIChatApi } from 'llm-api';
 import { z } from 'zod';
 
 import { completion } from './src';
 
 (async function go() {
-  const openai = new OpenAIChatApi(
-    {
-      apiKey: process.env.OPENAI_KEY ?? 'YOUR_OPENAI_KEY',
-    },
-    { contextSize: 4096, model: 'gpt-3.5-turbo-0613' },
-  );
+  const client = process.env.OPENAI_KEY
+    ? new OpenAIChatApi(
+        { apiKey: process.env.OPENAI_KEY },
+        { contextSize: 4096, model: 'gpt-3.5-turbo-0613' },
+      )
+    : process.env.ANTHROPIC_KEY
+    ? new AnthropicChatApi(
+        { apiKey: process.env.ANTHROPIC_KEY },
+        { contextSize: 100_000, model: 'claude-instant-1-100k' },
+      )
+    : undefined;
+  if (!client) {
+    throw new Error(
+      'Please pass in either an OpenAI or Anthropic environment variable',
+    );
+  }
 
-  const resStartup = await completion(openai, 'Generate a startup idea', {
+  const resStartup = await completion(client, 'Generate a startup idea', {
     schema: z.object({
       name: z.string().describe('The name of the startup'),
       description: z.string().describe('What does this startup do?'),
@@ -19,11 +29,11 @@ import { completion } from './src';
   });
   console.info('Response 1: ', resStartup.data);
 
-  const resHello = await completion(openai, 'Hello');
+  const resHello = await completion(client, 'Hello');
   console.info('Response 2:', resHello.data);
 
   const resComplexSchema = await completion(
-    openai,
+    client,
     'Generate a step by step plan to run a hachathon',
     {
       schema: z.object({
@@ -43,7 +53,7 @@ import { completion } from './src';
   console.info('Response 3:', resComplexSchema.data);
 
   const resBulletPoints = await completion(
-    openai,
+    client,
     'Generate a list of interesting areas of exploration about the renaissance',
     {
       schema: z.object({
@@ -66,4 +76,13 @@ import { completion } from './src';
     },
   );
   console.info('Response 4:', resBulletPoints.data);
+
+  const meaning = await completion(client, 'What is the meaning of life?')
+    .then((res) => res.respond('why'))
+    .then((res) => res.respond('why'))
+    .then((res) => res.respond('why'))
+    .then((res) => res.respond('why'))
+    .then((res) => res.respond('why'));
+
+  console.info('The meaning of life after 5 whys is: ', meaning.content);
 })();

@@ -1,9 +1,9 @@
-import { TokenError, CompletionApi } from 'llm-api';
+import { TokenError, CompletionApi, AnthropicChatApi } from 'llm-api';
 import { defaults } from 'lodash';
 import { z } from 'zod';
 
 import type { RequestOptions, Response } from './types';
-import { debug, zodToJsonSchema } from './utils';
+import { debug, parseUnsafeJson, zodToJsonSchema } from './utils';
 
 const FunctionName = 'print';
 const FunctionDescription =
@@ -20,6 +20,7 @@ export async function completion<T extends z.ZodType = z.ZodString>(
   _opt?: Partial<RequestOptions<T>>,
 ): Promise<Response<T>> {
   const message = typeof prompt === 'string' ? prompt : prompt();
+  const jsonSchema = _opt?.schema && zodToJsonSchema(_opt?.schema);
   const opt = defaults(
     {
       // build function to call if schema is defined
@@ -29,7 +30,7 @@ export async function completion<T extends z.ZodType = z.ZodString>(
             {
               name: FunctionName,
               description: FunctionDescription,
-              parameters: zodToJsonSchema(_opt.schema),
+              parameters: jsonSchema,
             },
           ]
         : undefined,
@@ -44,11 +45,28 @@ export async function completion<T extends z.ZodType = z.ZodString>(
   ) {
     throw new Error('Schemas can ONLY be an object');
   }
-
   debug.log('⬆️ sending request:', message);
 
   try {
-    let response = await model.textCompletion(message, opt);
+    const isAnthropic = model instanceof AnthropicChatApi;
+    const schemaInstructions =
+      isAnthropic && _opt?.schema && JSON.stringify(jsonSchema);
+    const firstSchemaKey =
+      isAnthropic && _opt?.schema && Object.keys(jsonSchema['properties'])[0];
+    const responsePrefix = `{ "${firstSchemaKey}": `;
+
+    // Anthropic does not have support for functions, so create a custom system message and inject it as the first system message
+    // Use the `responsePrefix` property to steer anthropic to output in the json structure
+    let response =
+      isAnthropic && _opt?.schema
+        ? await model.textCompletion(message, {
+            ...opt,
+            systemMessage: `You will respond to ALL human messages in JSON. Make sure the response follow the following JSON schema specifications: ${schemaInstructions}\n\n${
+              opt.systemMessage ?? ''
+            }`,
+            responsePrefix,
+          })
+        : await model.textCompletion(message, opt);
     if (!response) {
       throw new Error('Chat request failed');
     }
@@ -58,16 +76,13 @@ export async function completion<T extends z.ZodType = z.ZodString>(
 
     // validate res content, and recursively loop if invalid
     if (opt?.schema) {
-      if (!response.arguments) {
+      if (!isAnthropic && !response.arguments) {
         if (opt.autoHeal) {
           debug.log('⚠️ function not called, autohealing...');
-          response = await response.respond(
-            {
-              role: 'user',
-              content: `Please respond with a call to the ${FunctionName} function`,
-            },
-            opt,
-          );
+          response = await response.respond({
+            role: 'user',
+            content: `Please respond with a call to the ${FunctionName} function`,
+          });
 
           if (!response.arguments) {
             throw new Error('Response function autoheal failed');
@@ -77,7 +92,14 @@ export async function completion<T extends z.ZodType = z.ZodString>(
         }
       }
 
-      const res = opt.schema.safeParse(response.arguments);
+      let json = isAnthropic
+        ? parseUnsafeJson(response.content ?? '')
+        : response.arguments;
+      if (!json) {
+        throw new Error('No response received');
+      }
+
+      const res = opt.schema.safeParse(json);
       if (res.success) {
         return {
           ...response,
@@ -94,23 +116,25 @@ export async function completion<T extends z.ZodType = z.ZodString>(
                     '.',
                   )}. The issue is: ${issue.message}.`
                 : `\nThe issue is: ${issue.message}.`,
-            `There is an issue with that response, please rewrite by calling the ${FunctionName} function with the correct parameters.`,
+            isAnthropic
+              ? `There is an issue with that response, please rewrite by following the JSON schema exactly: ${schemaInstructions}`
+              : `There is an issue with that response, please rewrite by calling the ${FunctionName} function with the correct parameters.`,
           );
-          response = await response.respond(
-            { role: 'user', content: issuesMessage },
-            opt,
-          );
-
-          if (!response.arguments) {
-            throw new Error('Response schema autoheal failed');
-          }
+          response = await response.respond(issuesMessage);
         } else {
           throw new Error('Response parsing failed');
         }
       }
 
+      json = isAnthropic
+        ? parseUnsafeJson(response.content ?? '')
+        : response.arguments;
+      if (!json) {
+        throw new Error('Response schema autoheal failed');
+      }
+
       // TODO: there is definitely a cleaner way to implement this to avoid the duplicate parsing
-      const data = opt.schema.parse(response.arguments);
+      const data = opt.schema.parse(json);
       return {
         ...response,
         data,
