@@ -2,7 +2,7 @@
 
 [![test](https://github.com/dzhng/zod-gpt/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/dzhng/zod-gpt/actions/workflows/test.yml)
 
-Get structured, fully typed and validated JSON outputs from OpenAI and Anthropic models.
+Get structured, fully typed, and validated JSON outputs from OpenAI and Anthropic models.
 
 Under the hood, `zod-gpt` uses functions to coerce the model to always respond as function calls. Add self-reflection for reliability and zod for parsing & typing.
 
@@ -49,6 +49,7 @@ import { AnthropicChatApi } from 'llm-api';
 import { completion } from 'zod-gpt';
 
 const client = new AnthropicChatApi({ apiKey: 'YOUR_ANTHROPIC_KEY' });
+const response = await completion(client, ...);
 ```
 
 ## 🔨 Usage
