@@ -34,7 +34,7 @@ import { completion } from './src';
 
   const resComplexSchema = await completion(
     client,
-    'Generate a step by step plan to run a hachathon',
+    'Generate a step by step plan to run a hackathon',
     {
       schema: z.object({
         plan: z.array(

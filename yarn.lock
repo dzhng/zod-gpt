@@ -4401,9 +4401,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"llm-api@npm:^0.7.9":
-  version: 0.7.9
-  resolution: "llm-api@npm:0.7.9"
+"llm-api@npm:^0.7.10":
+  version: 0.7.10
+  resolution: "llm-api@npm:0.7.10"
   dependencies:
     "@anthropic-ai/sdk": ^0.5.2
     debug: ^4.3.4
@@ -4413,7 +4413,7 @@ __metadata:
     lodash: ^4.17.21
     openai-edge: ^1.1.0
     type-fest: ^3.12.0
-  checksum: da9d49c46bb39135a252b569d4e5625e204746405db46b1478d3b8137f94d78c7fed61bab9f8de7f6a5a5b2f189fd1875a40e6d6072a2297a9659038b1651e37
+  checksum: 13c52b2d87628d2ac50aff08e3bd7c08b699c7333fd4305bf1801c22bde21626311eb1dd96628f610ce8dfb7757c5c089af93971aba605b3e73e444516ff3a52
   languageName: node
   linkType: hard
 
@@ -6454,7 +6454,7 @@ __metadata:
     jsonic: ^1.0.1
     jsonrepair: ^3.2.0
     lint-staged: ^13.2.0
-    llm-api: ^0.7.9
+    llm-api: ^0.7.10
     lodash: ^4.17.21
     prettier: ^2.8.0
     ts-jest: ^29.0.5
@@ -6464,7 +6464,7 @@ __metadata:
     zod: ^3.21.4
     zod-to-json-schema: ^3.21.2
   peerDependencies:
-    llm-api: ^0.7.9
+    llm-api: ^0.7.10
     zod: ^3.21.4
   languageName: unknown
   linkType: soft
