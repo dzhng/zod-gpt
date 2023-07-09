@@ -2,7 +2,7 @@
 
 [![test](https://github.com/dzhng/zod-gpt/actions/workflows/test.yml/badge.svg?branch=main&event=push)](https://github.com/dzhng/zod-gpt/actions/workflows/test.yml)
 
-Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions.
+Get structured, fully typed and validated JSON outputs from OpenAI and Anthropic models.
 
 Under the hood, `zod-gpt` uses functions to coerce the model to always respond as function calls. Add self-reflection for reliability and zod for parsing & typing.
 
@@ -40,6 +40,15 @@ const response = await completion(openai, 'Generate a startup idea', {
 
 // data will be typed as { name: string; description: string }
 console.log(response.data);
+```
+
+Anthropic is also supported via `llm-api`:
+
+```typescript
+import { AnthropicChatApi } from 'llm-api';
+import { completion } from 'zod-gpt';
+
+const client = new AnthropicChatApi({ apiKey: 'YOUR_ANTHROPIC_KEY' });
 ```
 
 ## 🔨 Usage
@@ -196,7 +205,7 @@ interface Response<T extends z.ZodType> {
   // raw response from the completion API
   content?: string;
   name?: string;
-  arguments?: string;
+  arguments?: JsonValue;
   usage?: {
     promptTokens: number;
     completionTokens: number;
