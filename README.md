@@ -69,7 +69,7 @@ yarn add zod-gpt
 To setup in your codebase, initialize a new instance with the model you want via the `llm-api` peer dep. Note that `zod-gpt` is designed to work with any models that implements the `CompletionApi` interface, so you can also import your own API wrapper.
 
 ```typescript
-import { OpenAIChatApi } from 'zod-gpt';
+import { OpenAIChatApi } from 'llm-api';
 
 const openai = new OpenAIChatApi(
   { apiKey: 'YOUR_OPENAI_KEY' },
