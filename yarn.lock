@@ -22,9 +22,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@anthropic-ai/sdk@npm:^0.5.2":
-  version: 0.5.2
-  resolution: "@anthropic-ai/sdk@npm:0.5.2"
+"@anthropic-ai/sdk@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "@anthropic-ai/sdk@npm:0.5.3"
   dependencies:
     "@types/node": ^18.11.18
     "@types/node-fetch": ^2.6.4
@@ -36,7 +36,7 @@ __metadata:
     formdata-node: ^4.3.2
     node-fetch: ^2.6.7
     qs: ^6.10.3
-  checksum: c85e21497579e4cbd6bcd14720f6eb6cf19acace70822158dfe919048d4c55baae7ee08acf15a083424cb9c45d347f9972f7343f09813e0d3c683523c73b8026
+  checksum: 8402b7cbb3b3c10f6ea9456439b282dad0c8f3b64fb949d294d24213df928ef11290875d5e4daf88e9aac9b4b3513f9496ed1300f2db6601b0e830811cd06e17
   languageName: node
   linkType: hard
 
@@ -4401,11 +4401,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"llm-api@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "llm-api@npm:0.8.0"
+"llm-api@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "llm-api@npm:0.9.0"
   dependencies:
-    "@anthropic-ai/sdk": ^0.5.2
+    "@anthropic-ai/sdk": ^0.5.3
     debug: ^4.3.4
     js-tiktoken: ^1.0.7
     jsonic: ^1.0.1
@@ -4413,7 +4413,7 @@ __metadata:
     lodash: ^4.17.21
     openai-edge: ^1.1.0
     type-fest: ^3.12.0
-  checksum: 4579400eaeff016782922012e3e6d2835ba7e7cffd8cfc63ce929600b36f3f1f981255f81dff17f415cd7dbac3fbe0b1d0f4d5e02f76f8bf0054d1552a737df8
+  checksum: 59e651dda6f4642ad3a9b07f38e5e88888adc797135e04bda7e28a69f456d7bb20ea65c114b78c71433246628a062be98a041ca24762dae241fa55fa50984d9c
   languageName: node
   linkType: hard
 
@@ -6454,7 +6454,7 @@ __metadata:
     jsonic: ^1.0.1
     jsonrepair: ^3.2.0
     lint-staged: ^13.2.0
-    llm-api: ^0.8.0
+    llm-api: ^0.9.0
     lodash: ^4.17.21
     prettier: ^2.8.0
     ts-jest: ^29.0.5
@@ -6464,7 +6464,7 @@ __metadata:
     zod: ^3.21.4
     zod-to-json-schema: ^3.21.2
   peerDependencies:
-    llm-api: ^0.8.0
+    llm-api: ^0.9.0
     zod: ^3.21.4
   languageName: unknown
   linkType: soft
