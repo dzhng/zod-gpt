@@ -12,7 +12,7 @@ import { completion } from './src';
     : process.env.ANTHROPIC_KEY
     ? new AnthropicChatApi(
         { apiKey: process.env.ANTHROPIC_KEY },
-        { contextSize: 100_000, model: 'claude-instant-1-100k' },
+        { contextSize: 100_000, model: 'claude-2' },
       )
     : undefined;
   if (!client) {
