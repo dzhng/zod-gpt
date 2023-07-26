@@ -63,7 +63,11 @@ export async function completion<T extends z.ZodType = z.ZodString>(
             ...opt,
             systemMessage:
               `You will respond to ALL human messages in JSON. Make sure the response correctly follow the following JSON schema specifications: ${schemaInstructions}\n\n${
-                opt.systemMessage ?? ''
+                opt.systemMessage
+                  ? typeof opt.systemMessage === 'string'
+                    ? opt.systemMessage
+                    : opt.systemMessage()
+                  : ''
               }`.trim(),
             responsePrefix,
           })
