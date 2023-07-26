@@ -22,21 +22,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@anthropic-ai/sdk@npm:^0.5.3":
-  version: 0.5.3
-  resolution: "@anthropic-ai/sdk@npm:0.5.3"
+"@anthropic-ai/sdk@npm:^0.5.8":
+  version: 0.5.8
+  resolution: "@anthropic-ai/sdk@npm:0.5.8"
   dependencies:
     "@types/node": ^18.11.18
     "@types/node-fetch": ^2.6.4
-    "@types/qs": ^6.9.7
     abort-controller: ^3.0.0
     agentkeepalive: ^4.2.1
     digest-fetch: ^1.3.0
     form-data-encoder: 1.7.2
     formdata-node: ^4.3.2
     node-fetch: ^2.6.7
-    qs: ^6.10.3
-  checksum: 8402b7cbb3b3c10f6ea9456439b282dad0c8f3b64fb949d294d24213df928ef11290875d5e4daf88e9aac9b4b3513f9496ed1300f2db6601b0e830811cd06e17
+  checksum: 048aba76ff901107eef9ae6b0ec2c67f58888d25721fbcd56efa1d42859c8ace3a33431b75e0a1d6c4292b5d161ff0786f143e5171bea770c020ae432c45250f
   languageName: node
   linkType: hard
 
@@ -1124,13 +1122,6 @@ __metadata:
   version: 2.7.3
   resolution: "@types/prettier@npm:2.7.3"
   checksum: 705384209cea6d1433ff6c187c80dcc0b95d99d5c5ce21a46a9a58060c527973506822e428789d842761e0280d25e3359300f017fbe77b9755bc772ab3dc2f83
-  languageName: node
-  linkType: hard
-
-"@types/qs@npm:^6.9.7":
-  version: 6.9.7
-  resolution: "@types/qs@npm:6.9.7"
-  checksum: 7fd6f9c25053e9b5bb6bc9f9f76c1d89e6c04f7707a7ba0e44cc01f17ef5284adb82f230f542c2d5557d69407c9a40f0f3515e8319afd14e1e16b5543ac6cdba
   languageName: node
   linkType: hard
 
@@ -4401,11 +4392,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"llm-api@npm:^0.9.4":
-  version: 0.9.4
-  resolution: "llm-api@npm:0.9.4"
+"llm-api@npm:^0.9.5":
+  version: 0.9.5
+  resolution: "llm-api@npm:0.9.5"
   dependencies:
-    "@anthropic-ai/sdk": ^0.5.3
+    "@anthropic-ai/sdk": ^0.5.8
     debug: ^4.3.4
     js-tiktoken: ^1.0.7
     jsonic: ^1.0.1
@@ -4413,7 +4404,7 @@ __metadata:
     lodash: ^4.17.21
     openai-edge: ^1.1.0
     type-fest: ^3.12.0
-  checksum: bf9b3075efcbe1b3c7832b75e1bad441823d0407f31be50a22d3f46d6334062c292df66efe0474318d272b2a7d5ea06cd1a41828b282b57b4fe07eabbba1135e
+  checksum: 584d1e250225ffdaf06d732fb347ddbe8ebf3492b711269c3b6f099c6b65d4d0d980916435a07a1bd6d869cbeb9df2d00b986fb631167f73c671e74dd6ff9aa2
   languageName: node
   linkType: hard
 
@@ -5259,15 +5250,6 @@ __metadata:
   version: 6.0.2
   resolution: "pure-rand@npm:6.0.2"
   checksum: 79de33876a4f515d759c48e98d00756bbd916b4ea260cc572d7adfa4b62cace9952e89f0241d0410214554503d25061140fe325c66f845213d2b1728ba8d413e
-  languageName: node
-  linkType: hard
-
-"qs@npm:^6.10.3":
-  version: 6.11.2
-  resolution: "qs@npm:6.11.2"
-  dependencies:
-    side-channel: ^1.0.4
-  checksum: e812f3c590b2262548647d62f1637b6989cc56656dc960b893fe2098d96e1bd633f36576f4cd7564dfbff9db42e17775884db96d846bebe4f37420d073ecdc0b
   languageName: node
   linkType: hard
 
@@ -6454,7 +6436,7 @@ __metadata:
     jsonic: ^1.0.1
     jsonrepair: ^3.2.0
     lint-staged: ^13.2.0
-    llm-api: ^0.9.4
+    llm-api: ^0.9.5
     lodash: ^4.17.21
     prettier: ^2.8.0
     ts-jest: ^29.0.5
@@ -6464,7 +6446,7 @@ __metadata:
     zod: ^3.21.4
     zod-to-json-schema: ^3.21.2
   peerDependencies:
-    llm-api: ^0.9.4
+    llm-api: ^0.9.5
     zod: ^3.21.4
   languageName: unknown
   linkType: soft

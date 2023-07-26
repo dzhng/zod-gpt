@@ -61,9 +61,10 @@ export async function completion<T extends z.ZodType = z.ZodString>(
       isAnthropic && _opt?.schema
         ? await model.textCompletion(message, {
             ...opt,
-            systemMessage: `You will respond to ALL human messages in JSON. Make sure the response correctly follow the following JSON schema specifications: ${schemaInstructions}\n\n${
-              opt.systemMessage ?? ''
-            }`,
+            systemMessage:
+              `You will respond to ALL human messages in JSON. Make sure the response correctly follow the following JSON schema specifications: ${schemaInstructions}\n\n${
+                opt.systemMessage ?? ''
+              }`.trim(),
             responsePrefix,
           })
         : await model.textCompletion(message, opt);
