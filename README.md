@@ -180,6 +180,9 @@ type RequestOptions = {
   // default: true
   autoHeal?: boolean;
 
+  // set message history, useful if you want to continue an existing conversation
+  messageHistory?: ChatRequestMessage[];
+
   // the number of time to retry this request due to rate limit or recoverable API errors
   // default: 3
   retries?: number;

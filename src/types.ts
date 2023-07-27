@@ -17,7 +17,7 @@ export type RequestOptions<T extends z.ZodType> = Omit<
   // default: true
   autoHeal?: boolean;
 
-  // add default message history
+  // set message history, useful if you want to continue an existing conversation
   messageHistory?: ChatRequestMessage[];
 };
 
