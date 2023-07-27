@@ -1,4 +1,4 @@
-import { ModelRequestOptions, ChatResponse } from 'llm-api';
+import { ModelRequestOptions, ChatResponse, ChatRequestMessage } from 'llm-api';
 import { z } from 'zod';
 
 // don't expost the functions array to the request layer
@@ -16,6 +16,9 @@ export type RequestOptions<T extends z.ZodType> = Omit<
   // attempt to auto heal the output via reflection
   // default: true
   autoHeal?: boolean;
+
+  // add default message history
+  messageHistory?: ChatRequestMessage[];
 };
 
 export type Response<T extends z.ZodType> = ChatResponse & {

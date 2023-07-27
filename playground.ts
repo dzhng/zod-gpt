@@ -77,6 +77,18 @@ import { completion } from './src';
   );
   console.info('Response 4:', resBulletPoints.data);
 
+  const resMessageHistory = await completion(
+    client,
+    'What did I mention in my first message to you?',
+    {
+      messageHistory: [
+        { role: 'user', content: 'Tell me about large langauge models' },
+        { role: 'assistant', content: 'ok' },
+      ],
+    },
+  );
+  console.info('Response 5:', resMessageHistory.data);
+
   const meaning = await completion(client, 'What is the meaning of life?')
     .then((res) => res.respond('why'))
     .then((res) => res.respond('why'))

@@ -1,4 +1,9 @@
-import { TokenError, CompletionApi, AnthropicChatApi } from 'llm-api';
+import {
+  TokenError,
+  CompletionApi,
+  AnthropicChatApi,
+  ChatRequestMessage,
+} from 'llm-api';
 import { defaults } from 'lodash';
 import { z } from 'zod';
 
@@ -54,12 +59,16 @@ export async function completion<T extends z.ZodType = z.ZodString>(
     const firstSchemaKey =
       isAnthropic && _opt?.schema && Object.keys(jsonSchema['properties'])[0];
     const responsePrefix = `{ "${firstSchemaKey}": `;
+    const messages: ChatRequestMessage[] = [
+      ...(opt.messageHistory ?? []),
+      { role: 'user', content: message },
+    ];
 
     // Anthropic does not have support for functions, so create a custom system message and inject it as the first system message
     // Use the `responsePrefix` property to steer anthropic to output in the json structure
     let response =
       isAnthropic && _opt?.schema
-        ? await model.textCompletion(message, {
+        ? await model.chatCompletion(messages, {
             ...opt,
             systemMessage:
               `You will respond to ALL human messages in JSON. Make sure the response correctly follow the following JSON schema specifications: ${schemaInstructions}\n\n${
@@ -71,7 +80,7 @@ export async function completion<T extends z.ZodType = z.ZodString>(
               }`.trim(),
             responsePrefix,
           })
-        : await model.textCompletion(message, opt);
+        : await model.chatCompletion(messages, opt);
     if (!response) {
       throw new Error('Chat request failed');
     }
