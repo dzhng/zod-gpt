@@ -3,6 +3,7 @@ import {
   CompletionApi,
   AnthropicChatApi,
   ChatRequestMessage,
+  AnthropicBedrockChatApi,
 } from 'llm-api';
 import { defaults } from 'lodash';
 import { z } from 'zod';
@@ -53,7 +54,9 @@ export async function completion<T extends z.ZodType = z.ZodString>(
   debug.log('⬆️ sending request:', message);
 
   try {
-    const isAnthropic = model instanceof AnthropicChatApi;
+    const isAnthropic =
+      model instanceof AnthropicChatApi ||
+      model instanceof AnthropicBedrockChatApi;
     const schemaInstructions =
       isAnthropic && _opt?.schema && JSON.stringify(jsonSchema);
     const firstSchemaKey =

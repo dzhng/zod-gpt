@@ -1,7 +1,7 @@
 {
   "name": "zod-gpt",
   "description": "Get structured, fully typed JSON outputs from OpenAI's new 0613 models via functions",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "packageManager": "yarn@3.4.1",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",

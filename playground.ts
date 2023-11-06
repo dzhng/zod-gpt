@@ -1,20 +1,46 @@
-import { AnthropicChatApi, OpenAIChatApi } from 'llm-api';
+import {
+  AnthropicChatApi,
+  OpenAIChatApi,
+  AnthropicBedrockChatApi,
+} from 'llm-api';
 import { z } from 'zod';
 
 import { completion } from './src';
 
 (async function go() {
-  const client = process.env.OPENAI_KEY
-    ? new OpenAIChatApi(
-        { apiKey: process.env.OPENAI_KEY },
-        { contextSize: 4096, model: 'gpt-3.5-turbo-0613' },
-      )
-    : process.env.ANTHROPIC_KEY
-    ? new AnthropicChatApi(
-        { apiKey: process.env.ANTHROPIC_KEY },
-        { contextSize: 100_000, model: 'claude-2' },
-      )
-    : undefined;
+  let client:
+    | OpenAIChatApi
+    | AnthropicChatApi
+    | AnthropicBedrockChatApi
+    | undefined;
+
+  if (process.env.OPENAI_KEY) {
+    client = new OpenAIChatApi(
+      {
+        apiKey: process.env.OPENAI_KEY ?? 'YOUR_client_KEY',
+      },
+      { contextSize: 4096, model: 'gpt-3.5-turbo-0613' },
+    );
+  } else if (process.env.ANTHROPIC_KEY) {
+    client = new AnthropicChatApi(
+      {
+        apiKey: process.env.ANTHROPIC_KEY ?? 'YOUR_client_KEY',
+      },
+      { stream: true, temperature: 0, model: 'claude-2' },
+    );
+  } else if (
+    process.env.AWS_BEDROCK_ACCESS_KEY &&
+    process.env.AWS_BEDROCK_SECRET_KEY
+  ) {
+    client = new AnthropicBedrockChatApi(
+      {
+        accessKeyId: process.env.AWS_BEDROCK_ACCESS_KEY ?? 'YOUR_access_key',
+        secretAccessKey:
+          process.env.AWS_BEDROCK_SECRET_KEY ?? 'YOUR_secret_key',
+      },
+      { stream: true, temperature: 0, model: 'anthropic.claude-v2' },
+    );
+  }
   if (!client) {
     throw new Error(
       'Please pass in either an OpenAI or Anthropic environment variable',
