@@ -5,7 +5,7 @@ import {
   ChatRequestMessage,
   AnthropicBedrockChatApi,
 } from 'llm-api';
-import { defaults } from 'lodash';
+import { defaults, last } from 'lodash';
 import { z } from 'zod';
 
 import type { RequestOptions, Response } from './types';
@@ -23,9 +23,22 @@ const Defaults = {
 export async function completion<T extends z.ZodType = z.ZodString>(
   model: CompletionApi,
   prompt: string | (() => string),
-  _opt?: Partial<RequestOptions<T>>,
+  opt?: Partial<RequestOptions<T>>,
 ): Promise<Response<T>> {
   const message = typeof prompt === 'string' ? prompt : prompt();
+  const messages: ChatRequestMessage[] = [
+    ...(opt?.messageHistory ?? []),
+    { role: 'user', content: message },
+  ];
+
+  return chat(model, messages, opt);
+}
+
+export async function chat<T extends z.ZodType = z.ZodString>(
+  model: CompletionApi,
+  messages: ChatRequestMessage[],
+  _opt?: Partial<RequestOptions<T>>,
+): Promise<Response<T>> {
   const jsonSchema = _opt?.schema && zodToJsonSchema(_opt?.schema);
   const opt = defaults(
     {
@@ -51,7 +64,7 @@ export async function completion<T extends z.ZodType = z.ZodString>(
   ) {
     throw new Error('Schemas can ONLY be an object');
   }
-  debug.log('⬆️ sending request:', message);
+  debug.log('⬆️ sending request:', messages);
 
   try {
     const isAnthropic =
@@ -62,10 +75,6 @@ export async function completion<T extends z.ZodType = z.ZodString>(
     const firstSchemaKey =
       isAnthropic && _opt?.schema && Object.keys(jsonSchema['properties'])[0];
     const responsePrefix = `{ "${firstSchemaKey}": `;
-    const messages: ChatRequestMessage[] = [
-      ...(opt.messageHistory ?? []),
-      { role: 'user', content: message },
-    ];
 
     // Anthropic does not have support for functions, so create a custom system message and inject it as the first system message
     // Use the `responsePrefix` property to steer anthropic to output in the json structure
@@ -165,6 +174,8 @@ export async function completion<T extends z.ZodType = z.ZodString>(
     };
   } catch (e) {
     if (e instanceof TokenError && opt.autoSlice) {
+      // break out the last message to auto slice
+      const message = last(messages)?.content ?? '';
       const chunkSize = message.length - e.overflowTokens * 4;
       if (chunkSize < 0) {
         throw e;
@@ -173,7 +184,12 @@ export async function completion<T extends z.ZodType = z.ZodString>(
       debug.log(
         `⚠️ Request prompt too long, splitting text with chunk size of ${chunkSize}`,
       );
-      return completion(model, message.slice(0, chunkSize), opt);
+      const newMessage = message.slice(0, chunkSize);
+      return chat(
+        model,
+        [...messages.slice(0, -1), { role: 'user', content: newMessage }],
+        opt,
+      );
     } else {
       throw e;
     }
