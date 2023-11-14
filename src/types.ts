@@ -21,7 +21,7 @@ export type RequestOptions<T extends z.ZodType> = Omit<
   messageHistory?: ChatRequestMessage[];
 };
 
-export type Response<T extends z.ZodType> = ChatResponse & {
+export type Response<T extends z.ZodType> = {
   // override previous respond method to include schema types
   respond: (
     message: string | ChatRequestMessage,
@@ -30,4 +30,4 @@ export type Response<T extends z.ZodType> = ChatResponse & {
 
   // parsed and typecasted data from the model
   data: z.infer<T>;
-};
+} & ChatResponse;

@@ -103,6 +103,9 @@ import { completion } from './src';
   );
   console.info('Response 4:', resBulletPoints.data);
 
+  const resBuletPoints2 = await resBulletPoints.respond('Generate 4 more');
+  console.info('Response 4R:', resBuletPoints2.data);
+
   const resMessageHistory = await completion(
     client,
     'What did I mention in my first message to you?',

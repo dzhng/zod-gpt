@@ -5542,9 +5542,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"llm-api@npm:^0.9.6":
-  version: 0.9.6
-  resolution: "llm-api@npm:0.9.6"
+"llm-api@npm:^0.9.8":
+  version: 0.9.8
+  resolution: "llm-api@npm:0.9.8"
   dependencies:
     "@anthropic-ai/sdk": ^0.8.1
     "@aws-sdk/client-bedrock-runtime": ^3.427.0
@@ -5555,7 +5555,7 @@ __metadata:
     lodash: ^4.17.21
     openai-edge: ^1.2.2
     type-fest: ^4.6.0
-  checksum: df80dc7c11ec696d8880196284938b8242d3c24a70f95075a8e33ae0227613939472465ae481efcc1021e846d929ee7f2af5770a4c413621a7473dcad723fa27
+  checksum: b08d34e659a2b4272743ae5639aa565f9fe395348ee17c1598711fd0cdc2f733d0f304861e78871de54a1be88a09cc98720a9237325dcfd5da39bec160b1bc7f
   languageName: node
   linkType: hard
 
@@ -7628,7 +7628,7 @@ __metadata:
     jsonic: ^1.0.1
     jsonrepair: ^3.4.0
     lint-staged: ^13.2.0
-    llm-api: ^0.9.6
+    llm-api: ^0.9.8
     lodash: ^4.17.21
     prettier: ^2.8.0
     ts-jest: ^29.1.1
@@ -7638,7 +7638,7 @@ __metadata:
     zod: ^3.22.4
     zod-to-json-schema: ^3.21.4
   peerDependencies:
-    llm-api: ^0.9.6
+    llm-api: ^0.9.8
     zod: ^3.22.4
   languageName: unknown
   linkType: soft
