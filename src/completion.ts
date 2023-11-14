@@ -129,6 +129,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
       if (res.success) {
         return {
           ...response,
+          respond: response.respond as Response<T>['respond'],
           data: res.data,
         };
       } else {
@@ -163,6 +164,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
       const data = opt.schema.parse(json);
       return {
         ...response,
+        respond: response.respond as Response<T>['respond'],
         data,
       };
     }
@@ -170,6 +172,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
     // if no schema is defined, default to string
     return {
       ...response,
+      respond: response.respond as Response<T>['respond'],
       data: String(response.content),
     };
   } catch (e) {
