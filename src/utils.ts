@@ -31,10 +31,16 @@ const extractJSONObjectResponse = (res: string): string | undefined =>
 const extractJSONArrayResponse = (res: string): string | undefined =>
   res.match(/\[(.|\n)*\]/g)?.[0];
 
+const extractJSONMarkdownResponse = (res: string): string | undefined => {
+  const match = res.match(/```json((.|\n)*?)```/g)?.[0];
+  return match ? match.replace(/```json|```/g, '').trim() : undefined;
+};
+
 export function parseUnsafeJson(json: string): any {
   try {
-    const potientialArray = extractJSONArrayResponse(json);
-    const potientialObject = extractJSONObjectResponse(json);
+    const potientialJson = extractJSONMarkdownResponse(json);
+    const potientialArray = extractJSONArrayResponse(potientialJson ?? json);
+    const potientialObject = extractJSONObjectResponse(potientialJson ?? json);
     // extract the larger text between potiential array and potiential object, we want the parent json object
     const extracted =
       (potientialArray?.length ?? 0) > (potientialObject?.length ?? 0)
