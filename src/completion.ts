@@ -75,6 +75,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
     const firstSchemaKey =
       isAnthropic && _opt?.schema && Object.keys(jsonSchema['properties'])[0];
     const responsePrefix = `\`\`\`json\n{ "${firstSchemaKey}": `;
+    const stopSequence = '```';
 
     // Anthropic does not have support for functions, so create a custom system message and inject it as the first system message
     // Use the `responsePrefix` property to steer anthropic to output in the json structure
@@ -91,6 +92,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
                   : ''
               }`.trim(),
             responsePrefix,
+            stop: stopSequence,
           })
         : await model.chatCompletion(messages, opt);
     if (!response) {
