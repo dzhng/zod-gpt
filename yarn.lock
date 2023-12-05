@@ -7650,7 +7650,7 @@ __metadata:
     zod: ^3.22.4
     zod-to-json-schema: ^3.21.4
   peerDependencies:
-    llm-api: ^1.0.0
+    llm-api: ^1.0.1
     zod: ^3.22.4
   languageName: unknown
   linkType: soft
