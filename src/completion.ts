@@ -13,7 +13,7 @@ import { debug, parseUnsafeJson, zodToJsonSchema } from './utils';
 
 const FunctionName = 'print';
 const FunctionDescription =
-  'ALWAYS respond by calling this function with the given parameters';
+  'Respond by calling this function with the correct parameters.';
 
 const Defaults = {
   autoHeal: true,
@@ -43,12 +43,14 @@ export async function chat<T extends z.ZodType = z.ZodString>(
   const opt = defaults(
     {
       // build function to call if schema is defined
-      callFunction: _opt?.schema ? FunctionName : undefined,
+      callFunction: _opt?.schema
+        ? _opt.functionName ?? FunctionName
+        : undefined,
       functions: _opt?.schema
         ? [
             {
-              name: FunctionName,
-              description: FunctionDescription,
+              name: _opt.functionName ?? FunctionName,
+              description: _opt.functionDescription ?? FunctionDescription,
               parameters: jsonSchema,
             },
           ]
@@ -138,7 +140,11 @@ export async function chat<T extends z.ZodType = z.ZodString>(
                 ...messages,
                 response.message,
                 typeof message === 'string'
-                  ? { role: 'user', content: message }
+                  ? {
+                      role: 'tool',
+                      toolCallId: response.toolCallId,
+                      content: message,
+                    }
                   : message,
               ],
               opt ?? _opt,
@@ -184,7 +190,11 @@ export async function chat<T extends z.ZodType = z.ZodString>(
               ...messages,
               response.message,
               typeof message === 'string'
-                ? { role: 'user', content: message }
+                ? {
+                    role: 'tool',
+                    toolCallId: response.toolCallId,
+                    content: message,
+                  }
                 : message,
             ],
             opt ?? _opt,

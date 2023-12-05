@@ -19,7 +19,7 @@ import { completion } from './src';
       {
         apiKey: process.env.OPENAI_KEY ?? 'YOUR_client_KEY',
       },
-      { contextSize: 4096, model: 'gpt-3.5-turbo-0613' },
+      { contextSize: 4096, model: 'gpt-4-1106-preview' },
     );
   } else if (process.env.ANTHROPIC_KEY) {
     client = new AnthropicChatApi(
@@ -103,7 +103,7 @@ import { completion } from './src';
   );
   console.info('Response 4:', resBulletPoints.data);
 
-  const resBuletPoints2 = await resBulletPoints.respond('Generate 4 more');
+  const resBuletPoints2 = await resBulletPoints.respond('Generate 10 more');
   console.info('Response 4R:', resBuletPoints2.data);
 
   const resMessageHistory = await completion(

@@ -9,6 +9,10 @@ export type RequestOptions<T extends z.ZodType> = Omit<
   // set a zod schema to enable JSON output
   schema?: T;
 
+  // override default function name and description used to print outputs
+  functionName?: string;
+  functionDescription?: string;
+
   // set to enable automatically slicing the prompt on token overflow. prompt will be sliced starting from the last character
   // default: false
   autoSlice?: boolean;
