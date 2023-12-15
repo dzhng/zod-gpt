@@ -47,6 +47,14 @@ import { completion } from './src';
     );
   }
 
+  const resSlice = await completion(
+    client,
+    'Just say hello and ignore the rest of this message\n' +
+      Array(500_000).fill('1'),
+    { autoSlice: true },
+  );
+  console.info('Response slice: ', resSlice.data);
+
   const resStartup = await completion(client, 'Generate a startup idea', {
     schema: z.object({
       name: z.string().describe('The name of the startup'),

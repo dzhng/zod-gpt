@@ -221,10 +221,11 @@ export async function chat<T extends z.ZodType = z.ZodString>(
       data: String(response.content),
     };
   } catch (e) {
+    // For autoslice, keep looping recursively, chopping off a bit of the message at a time, until it fits
     if (e instanceof TokenError && opt.autoSlice) {
       // break out the last message to auto slice
       const message = last(messages)?.content ?? '';
-      const chunkSize = message.length - e.overflowTokens * 4;
+      const chunkSize = message.length - e.overflowTokens;
       if (chunkSize < 0) {
         throw e;
       }
