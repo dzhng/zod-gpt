@@ -26,7 +26,7 @@ import { completion } from './src';
       {
         apiKey: process.env.ANTHROPIC_KEY ?? 'YOUR_client_KEY',
       },
-      { stream: true, temperature: 0, model: 'claude-2' },
+      { stream: true, temperature: 0, model: 'claude-3-sonnet-20240229' },
     );
   } else if (
     process.env.AWS_BEDROCK_ACCESS_KEY &&
@@ -47,7 +47,7 @@ import { completion } from './src';
     );
   }
 
-  const resSlice = await completion(
+  /*const resSlice = await completion(
     client,
     'Just say hello and ignore the rest of this message\n' +
       Array(500_000).fill('1'),
@@ -84,7 +84,7 @@ import { completion } from './src';
       }),
     },
   );
-  console.info('Response 3:', resComplexSchema.data);
+  console.info('Response 3:', resComplexSchema.data);*/
 
   const resBulletPoints = await completion(
     client,

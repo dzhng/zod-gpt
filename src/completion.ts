@@ -76,7 +76,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
       isAnthropic && _opt?.schema && JSON.stringify(jsonSchema);
     const firstSchemaKey =
       isAnthropic && _opt?.schema && Object.keys(jsonSchema['properties'])[0];
-    const responsePrefix = `\`\`\`json\n{ "${firstSchemaKey}": `;
+    const responsePrefix = `\`\`\`json\n{ "${firstSchemaKey}":`;
     const stopSequence = '```';
 
     // Anthropic does not have support for functions, so create a custom system message and inject it as the first system message
@@ -86,7 +86,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
         ? await model.chatCompletion(messages, {
             ...opt,
             systemMessage:
-              `You will respond to ALL human messages in JSON. Make sure the response correctly follow the following JSON schema specifications: ${schemaInstructions}\n\n${
+              `You will respond to ALL human messages in JSON. Make sure the response correctly follow the following JSON schema specifications:\n<json_schema>\n${schemaInstructions}\n</json_schema>\n\n${
                 opt.systemMessage
                   ? typeof opt.systemMessage === 'string'
                     ? opt.systemMessage
@@ -141,7 +141,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
                 response.message,
                 typeof message === 'string'
                   ? {
-                      role: 'tool',
+                      role: isAnthropic ? 'user' : 'tool',
                       toolCallId: response.toolCallId,
                       content: message,
                     }
@@ -191,7 +191,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
               response.message,
               typeof message === 'string'
                 ? {
-                    role: 'tool',
+                    role: isAnthropic ? 'user' : 'tool',
                     toolCallId: response.toolCallId,
                     content: message,
                   }

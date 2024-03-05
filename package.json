@@ -1,7 +1,7 @@
 {
   "name": "zod-gpt",
   "description": "Get structured, fully typed JSON outputs from OpenAI and Anthropic LLMs",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "packageManager": "yarn@3.4.1",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -40,13 +40,14 @@
     "lint": "eslint src --ext ts,tsx,js,jsx --ignore-path .gitignore --fix",
     "test": "jest --passWithNoTests",
     "test:update": "jest -u --passWithNoTests",
-    "playground": "node -r tsconfig-paths/register -r ts-node/register playground"
+    "playground": "tsx playground"
   },
   "dependencies": {
     "debug": "^4.3.4",
     "jsonic": "^1.0.1",
     "jsonrepair": "^3.4.0",
     "lodash": "^4.17.21",
+    "tsx": "^4.7.1",
     "type-fest": "^4.6.0",
     "zod-to-json-schema": "^3.21.4"
   },
@@ -71,7 +72,6 @@
     "llm-api": "^1.2.0",
     "prettier": "^2.8.0",
     "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "zod": "^3.22.4"
   },
