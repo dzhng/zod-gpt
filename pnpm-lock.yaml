@@ -68,8 +68,8 @@ devDependencies:
     specifier: ^13.2.0
     version: 13.3.0
   llm-api:
-    specifier: ^1.3.5
-    version: 1.3.5
+    specifier: ^1.4.0
+    version: 1.4.0
   prettier:
     specifier: ^2.8.0
     version: 2.8.8
@@ -3615,6 +3615,22 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
+  /groq-sdk@0.3.2:
+    resolution: {integrity: sha512-Xp1xOea7nqUcTMndpiA8VkjZ05jM/eUUeCILxhRF+c2etBz/myQwRcUrr5lpWc0euIt96AiBMa9aYa0Iqrh13g==}
+    dependencies:
+      '@types/node': 18.19.21
+      '@types/node-fetch': 2.6.11
+      abort-controller: 3.0.0
+      agentkeepalive: 4.5.0
+      digest-fetch: 1.3.0
+      form-data-encoder: 1.7.2
+      formdata-node: 4.4.1
+      node-fetch: 2.7.0
+      web-streams-polyfill: 3.3.3
+    transitivePeerDependencies:
+      - encoding
+    dev: true
+
   /has-bigints@1.0.2:
     resolution: {integrity: sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ==}
     dev: true
@@ -4554,12 +4570,13 @@ packages:
       wrap-ansi: 8.1.0
     dev: true
 
-  /llm-api@1.3.5:
-    resolution: {integrity: sha512-/tbfOCxR8kL32RkLZ+Qdc8T+0/LNftPnSX4IVf8/lwjZ2rKV4BtkAUc2v3Em0eVJ0gpewhL/5hlVrf/0pphkoQ==}
+  /llm-api@1.4.0:
+    resolution: {integrity: sha512-nEKtM+1LJO2LjrKeT5Pm3hpohpatCWvG2jquCSb9vFQCtO6a0IEJFB0kXVuKyiVy1KsORUxY0Rizo97QfNc4Hw==}
     dependencies:
       '@anthropic-ai/sdk': 0.16.1
       '@aws-sdk/client-bedrock-runtime': 3.525.0
       debug: 4.3.4
+      groq-sdk: 0.3.2
       js-tiktoken: 1.0.10
       jsonic: 1.0.1
       jsonrepair: 3.6.0
