@@ -4,6 +4,7 @@ import {
   AnthropicChatApi,
   ChatRequestMessage,
   AnthropicBedrockChatApi,
+  GroqChatApi,
 } from 'llm-api';
 import { defaults, last } from 'lodash';
 import { z } from 'zod';
@@ -69,20 +70,24 @@ export async function chat<T extends z.ZodType = z.ZodString>(
   debug.log('⬆️ sending request:', messages);
 
   try {
-    const isAnthropic =
+    const hasFunctionCall = !(
       model instanceof AnthropicChatApi ||
-      model instanceof AnthropicBedrockChatApi;
+      model instanceof AnthropicBedrockChatApi ||
+      model instanceof GroqChatApi
+    );
     const schemaInstructions =
-      isAnthropic && _opt?.schema && JSON.stringify(jsonSchema);
+      !hasFunctionCall && _opt?.schema && JSON.stringify(jsonSchema);
     const firstSchemaKey =
-      isAnthropic && _opt?.schema && Object.keys(jsonSchema['properties'])[0];
+      !hasFunctionCall &&
+      _opt?.schema &&
+      Object.keys(jsonSchema['properties'])[0];
     const responsePrefix = `\`\`\`json\n{ "${firstSchemaKey}":`;
     const stopSequence = '```';
 
     // Anthropic does not have support for functions, so create a custom system message and inject it as the first system message
     // Use the `responsePrefix` property to steer anthropic to output in the json structure
     let response =
-      isAnthropic && _opt?.schema
+      !hasFunctionCall && _opt?.schema
         ? await model.chatCompletion(messages, {
             ...opt,
             systemMessage:
@@ -93,7 +98,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
                     : opt.systemMessage()
                   : ''
               }`.trim(),
-            responsePrefix,
+            responsePrefix: opt.responsePrefix ?? responsePrefix,
             stop: stopSequence,
           })
         : await model.chatCompletion(messages, opt);
@@ -106,7 +111,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
 
     // validate res content, and recursively loop if invalid
     if (opt?.schema) {
-      if (!isAnthropic && !response.arguments) {
+      if (hasFunctionCall && !response.arguments) {
         if (opt.autoHeal) {
           debug.log('⚠️ function not called, autohealing...');
           response = await response.respond({
@@ -122,9 +127,9 @@ export async function chat<T extends z.ZodType = z.ZodString>(
         }
       }
 
-      let json = isAnthropic
-        ? parseUnsafeJson(response.content ?? '')
-        : response.arguments;
+      let json = hasFunctionCall
+        ? response.arguments
+        : parseUnsafeJson(response.content ?? '');
       if (!json) {
         throw new Error('No response received');
       }
@@ -141,7 +146,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
                 response.message,
                 typeof message === 'string'
                   ? {
-                      role: isAnthropic ? 'user' : 'tool',
+                      role: hasFunctionCall ? 'tool' : 'user',
                       toolCallId: response.toolCallId,
                       content: message,
                     }
@@ -162,9 +167,9 @@ export async function chat<T extends z.ZodType = z.ZodString>(
                     issue.message
                   }.`
                 : `\nThe issue is: ${issue.message}.`,
-            isAnthropic
-              ? `There is an issue with that response, please follow the JSON schema EXACTLY, the output must be valid parsable JSON: ${schemaInstructions}`
-              : `There is an issue with that response, please rewrite by calling the ${FunctionName} function with the correct parameters.`,
+            hasFunctionCall
+              ? `There is an issue with that response, please rewrite by calling the ${FunctionName} function with the correct parameters.`
+              : `There is an issue with that response, please follow the JSON schema EXACTLY, the output must be valid parsable JSON: ${schemaInstructions}`,
           );
           response = await response.respond(issuesMessage);
         } else {
@@ -172,9 +177,9 @@ export async function chat<T extends z.ZodType = z.ZodString>(
         }
       }
 
-      json = isAnthropic
-        ? parseUnsafeJson(response.content ?? '')
-        : response.arguments;
+      json = hasFunctionCall
+        ? response.arguments
+        : parseUnsafeJson(response.content ?? '');
       if (!json) {
         throw new Error('Response schema autoheal failed');
       }
@@ -191,7 +196,7 @@ export async function chat<T extends z.ZodType = z.ZodString>(
               response.message,
               typeof message === 'string'
                 ? {
-                    role: isAnthropic ? 'user' : 'tool',
+                    role: hasFunctionCall ? 'tool' : 'user',
                     toolCallId: response.toolCallId,
                     content: message,
                   }

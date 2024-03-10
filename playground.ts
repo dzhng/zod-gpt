@@ -2,6 +2,7 @@ import {
   AnthropicChatApi,
   OpenAIChatApi,
   AnthropicBedrockChatApi,
+  GroqChatApi,
 } from 'llm-api';
 import { z } from 'zod';
 
@@ -12,6 +13,7 @@ import { completion } from './src';
     | OpenAIChatApi
     | AnthropicChatApi
     | AnthropicBedrockChatApi
+    | GroqChatApi
     | undefined;
 
   if (process.env.OPENAI_KEY) {
@@ -19,14 +21,14 @@ import { completion } from './src';
       {
         apiKey: process.env.OPENAI_KEY ?? 'YOUR_client_KEY',
       },
-      { contextSize: 4096, model: 'gpt-4-1106-preview' },
+      { contextSize: 4096 },
     );
   } else if (process.env.ANTHROPIC_KEY) {
     client = new AnthropicChatApi(
       {
         apiKey: process.env.ANTHROPIC_KEY ?? 'YOUR_client_KEY',
       },
-      { stream: true, temperature: 0, model: 'claude-3-sonnet-20240229' },
+      { stream: true, temperature: 0 },
     );
   } else if (
     process.env.AWS_BEDROCK_ACCESS_KEY &&
@@ -39,6 +41,13 @@ import { completion } from './src';
           process.env.AWS_BEDROCK_SECRET_KEY ?? 'YOUR_secret_key',
       },
       { stream: true, temperature: 0, model: 'anthropic.claude-v2' },
+    );
+  } else if (process.env.GROQ_KEY) {
+    client = new GroqChatApi(
+      {
+        apiKey: process.env.GROQ_KEY ?? 'YOUR_client_KEY',
+      },
+      { stream: false, temperature: 0 },
     );
   }
   if (!client) {
@@ -53,7 +62,7 @@ import { completion } from './src';
       Array(500_000).fill('1'),
     { autoSlice: true },
   );
-  console.info('Response slice: ', resSlice.data);
+  console.info('Response slice: ', resSlice.data);*/
 
   const resStartup = await completion(client, 'Generate a startup idea', {
     schema: z.object({
@@ -84,7 +93,7 @@ import { completion } from './src';
       }),
     },
   );
-  console.info('Response 3:', resComplexSchema.data);*/
+  console.info('Response 3:', resComplexSchema.data);
 
   const resBulletPoints = await completion(
     client,

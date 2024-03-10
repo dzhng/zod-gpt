@@ -68,8 +68,8 @@ devDependencies:
     specifier: ^13.2.0
     version: 13.3.0
   llm-api:
-    specifier: ^1.4.0
-    version: 1.4.0
+    specifier: ^1.4.1
+    version: 1.4.1
   prettier:
     specifier: ^2.8.0
     version: 2.8.8
@@ -4570,8 +4570,8 @@ packages:
       wrap-ansi: 8.1.0
     dev: true
 
-  /llm-api@1.4.0:
-    resolution: {integrity: sha512-nEKtM+1LJO2LjrKeT5Pm3hpohpatCWvG2jquCSb9vFQCtO6a0IEJFB0kXVuKyiVy1KsORUxY0Rizo97QfNc4Hw==}
+  /llm-api@1.4.1:
+    resolution: {integrity: sha512-KotZFsR9Ojwvlomi6WaSLsN7r9KoCFojUIzWB/dkpW/XU/R5wKL76PpPcASfD7nrir4zRRWgJj0Z1vGhlhtRlQ==}
     dependencies:
       '@anthropic-ai/sdk': 0.16.1
       '@aws-sdk/client-bedrock-runtime': 3.525.0
